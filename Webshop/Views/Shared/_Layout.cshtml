@@ -10,7 +10,7 @@
     </head>
     <body>
         <header>
-            <div class="content-wrapper">
+            <div class="content-wrapper clear-fix">
                 <div class="float-left">
                     <p class="site-title">@Html.ActionLink("Webshop", "Index", "Home")</p>
                 </div>
@@ -28,15 +28,20 @@
                 </div>
             </div>
         </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
+        <div id="clear-fix">
+            <div id="sidebar_categories" class="sidebar float-left">
+                @Html.Action("SideBar", "Home")
+            </div>
+            <div id="body" class="content">
+                @RenderSection("featured", required: false)
+                <div class="content-wrapper main-content">
+                    @RenderBody()
+                </div>
+            </div>
         </div>
         <footer>
-            <div class="content-wrapper">
-                <div class="float-left">
+            <div class="clear-fix">
+                <div class="">
                     <p>&copy; @DateTime.Now.Year - Webshop</p>
                 </div>
             </div>

@@ -1,0 +1,82 @@
+﻿@model Webshop.Models.Product
+
+@{
+    ViewBag.Title = @Html.DisplayFor(model => model.Name);
+}
+
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+
+<fieldset>
+    <legend>Product</legend>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TextDescription)
+    </div>
+    <div class="display-field">
+        <img src="~/Images/Products/normal_@Html.DisplayFor(model => model.ImageName)" />
+    </div>
+    <table>
+    @{
+        Webshop.Models.ProductProperty lastItem = new Webshop.Models.ProductProperty();
+    }
+    @foreach (var item in Model.Properties)
+    {
+        if(item.Property1.Equals(item.Property2)){
+            <tr>
+                <td>
+                    @item.Property1
+                </td>
+                <td>
+                    @item.Property3
+                </td>
+                <td>
+
+                </td>
+            </tr>    
+        } else {
+            if(!item.Property1.Equals(lastItem.Property1)){
+                <tr>
+                    <td>
+                        @item.Property1
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+                        @item.Property2
+                    </td>
+                    <td>
+                        @item.Property3
+                    </td>
+                </tr>
+            } else {
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+                        @item.Property2
+                    </td>
+                    <td>
+                        @item.Property3
+                    </td>
+                </tr>
+            }
+        }
+        lastItem = item;
+    }
+    </table>
+</fieldset>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
