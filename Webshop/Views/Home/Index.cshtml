@@ -1,14 +1,20 @@
 ﻿@model IEnumerable<Webshop.Models.Product>
 
 @{
-    ViewBag.Title = "View1";
+    ViewBag.Title = ViewBag.category;
 }
 
-<h2>View1</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h2>
+    @ViewBag.category
+    @if (!"".Equals(ViewBag.subcat1))
+    {
+        Html.Raw("->" + ViewBag.subcat1);
+    }
+    @if (!"".Equals(ViewBag.subcat2))
+    {
+        Html.Raw("->" + ViewBag.subcat2);
+    }
+</h2>
 <table>
     <tr>
         <th>
@@ -47,7 +53,7 @@
             @Html.DisplayFor(modelItem => item.SubCat2)
         </td>
         <td>
-            @Html.ActionLink("Details", "Product", new { id=item.ProductID })
+            @Html.ActionLink("Details", "Product", new { id=item.ProductID, category = ViewBag.category, subcat1 = ViewBag.subcat1, subcat2 = ViewBag.subcat2 })
         </td>
     </tr>
 }

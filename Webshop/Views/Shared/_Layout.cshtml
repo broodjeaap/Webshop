@@ -9,45 +9,51 @@
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
-        <header>
-            <div class="content-wrapper clear-fix">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("Webshop", "Index", "Home")</p>
+        <div id="container">
+            <header>
+                <div id="header">
+                    <div class="float-left">
+                        <p class="header_title">@Html.ActionLink("Webshop", "Index", "Home")</p>
+                    </div>
+                    <div id="header_menu_and_login" class="clearfix">
+                        <div id="login">
+                            @Html.Partial("_LoginPartial")
+                        </div>
+                        <div id="header_menu">
+                            <div id="header_menu_home" class="header_menu_item">
+                                @Html.ActionLink("Home", "Index", "Home")
+                            </div>
+                            <div id="header_menu_about" class="header_menu_item">
+                                @Html.ActionLink("About", "About", "Home")
+                            </div>
+                            <div id="header_menu_contact" class="header_menu_item">
+                                @Html.ActionLink("Contact", "Contact", "Home")
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </nav>
+            </header>
+            <div id="clearfix">
+                <div id="sidebar_categories" class="sidebar float-left">
+                    @Html.Action("SideBar", "Home", new { category = ViewBag.category, subcat1 = ViewBag.subcat1, subcat2 = ViewBag.subcat2 })
+                </div>
+                <div id="body" class="content">
+                    @RenderSection("featured", required: false)
+                    <div class="content-wrapper main-content">
+                        @RenderBody()
+                    </div>
                 </div>
             </div>
-        </header>
-        <div id="clear-fix">
-            <div id="sidebar_categories" class="sidebar float-left">
-                @Html.Action("SideBar", "Home")
-            </div>
-            <div id="body" class="content">
-                @RenderSection("featured", required: false)
-                <div class="content-wrapper main-content">
-                    @RenderBody()
+            <footer>
+                <div class="clear-fix">
+                    <div class="">
+                        <p>&copy; @DateTime.Now.Year - Webshop</p>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <footer>
-            <div class="clear-fix">
-                <div class="">
-                    <p>&copy; @DateTime.Now.Year - Webshop</p>
-                </div>
-            </div>
-        </footer>
+            </footer>
 
-        @Scripts.Render("~/bundles/jquery")
-        @RenderSection("scripts", required: false)
+            @Scripts.Render("~/bundles/jquery")
+            @RenderSection("scripts", required: false)
+        </div>
     </body>
 </html>
