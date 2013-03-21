@@ -1,5 +1,7 @@
 ﻿#container {
     width:1024px;
+    margin-left: auto ;
+    margin-right: auto ;
 }
 
 #header {
@@ -46,6 +48,42 @@
 .subcat2 {
     padding-left:30px;
 }
+
+#priceText {
+    font-size: 30px;
+    color: #AD0109;
+    text-align: center;
+}
+
+.desc-image-price-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.product-desc-div {
+    width: 75%;
+    float:left;
+}
+
+.product-image-price-div {
+    overflow: hidden;
+}
+
+.product-properties-div {
+    margin: 50px 0px 50px 0px;
+    width: 75%;
+    margin-left: auto ;
+    margin-right: auto ;
+}
+
+.product-propertie-table {
+    border: 1px solid black;
+}
+
+.copyright {
+    text-align: center;
+}
+
 
 /* new clearfix */
 .clearfix:after {

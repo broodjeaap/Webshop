@@ -1,18 +1,25 @@
 ﻿@model IEnumerable<Webshop.Models.Product>
 
 @{
-    ViewBag.Title = ViewBag.category;
+    int currentPage = (int)(ViewBag.currentPage);
+    int perPage = (int)(ViewBag.perPage);
+    string category = (string)(ViewBag.category);
+    string subcat1 = (string)(ViewBag.subcat1);
+    string subcat2 = (string)(ViewBag.subcat2);
+    int numberOfPages = (int)(ViewBag.NumberOfPages);
+    ViewBag.Title = category;
+
 }
 
 <h2>
-    @ViewBag.category
-    @if (!"".Equals(ViewBag.subcat1))
+    @category
+    @if (!"".Equals(subcat1))
     {
-        Html.Raw("->" + ViewBag.subcat1);
+        Html.Raw("->" + subcat1);
     }
-    @if (!"".Equals(ViewBag.subcat2))
+    @if (!"".Equals(subcat2))
     {
-        Html.Raw("->" + ViewBag.subcat2);
+        Html.Raw("->" + subcat2);
     }
 </h2>
 <table>
@@ -53,9 +60,91 @@
             @Html.DisplayFor(modelItem => item.SubCat2)
         </td>
         <td>
-            @Html.ActionLink("Details", "Product", new { id=item.ProductID, category = ViewBag.category, subcat1 = ViewBag.subcat1, subcat2 = ViewBag.subcat2 })
+            @Html.ActionLink("Details", "Product", new { id=item.ProductID, category = category, subcat1 = subcat1, subcat2 = subcat2, page = currentPage, perPage = perPage })
         </td>
     </tr>
 }
+</table>
+<table id="product_pages_table">
+    <tr>
+        @if(numberOfPages > 15){
+            if(currentPage > 1){
+                <td>
+                    @Html.ActionLink("First", "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = 1, perPage = perPage })
+                </td>
+                <td>
+                    @Html.ActionLink("Previous", "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = currentPage - 1, perPage = perPage })
+                </td>
+            }
+            if(currentPage >= 4){
+                for (var a = 1; a <= 4; ++a) //1,2,3,4
+                {
+                    <td>
+                        @Html.ActionLink(a.ToString(), "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = a, perPage = perPage })
+                    </td>
+                }
+                <td>
+                    ...
+                </td>
+            }
 
+            for (var a = (int)(currentPage) - 3; a < currentPage; ++a) // 3 pages before current page
+            {
+                if (a <= 0)
+                {
+                    continue;
+                }
+                <td>
+                    @Html.ActionLink(a.ToString(), "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = a, perPage = perPage })
+                </td>       
+            }
+            
+            <td>
+                @currentPage
+            </td>
+            
+            for (var a = (int)(currentPage) + 1; a <= currentPage + 3; ++a) // 3 pages after current page
+            {
+                if (a >= numberOfPages)
+                {
+                    continue;
+                }
+                <td>
+                    @Html.ActionLink(a.ToString(), "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = a, perPage = perPage })
+                </td>       
+            }
+            <td>
+                ...
+            </td>
+            for (var a = numberOfPages - 4; a <= numberOfPages; ++a) //last pages
+            {
+                <td>
+                    @Html.ActionLink(a.ToString(), "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = a, perPage = perPage })
+                </td>
+            }
+            if (currentPage < numberOfPages)
+            {
+                <td>
+                    @Html.ActionLink("Next", "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = currentPage + 1, perPage = perPage })
+                </td>
+                <td>
+                    @Html.ActionLink("Last", "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = numberOfPages, perPage = perPage })
+                </td>
+            }
+        } else {
+            for (var a = 1; a < numberOfPages; ++a)
+            {
+                if (a == currentPage)
+                {
+                    <td>
+                        @a
+                    </td>
+                } else {
+                    <td>
+                        @Html.ActionLink(a.ToString(), "Index", new { category = category, subcat1 = subcat1, subcat2 = subcat2, page = a, perPage = perPage })
+                    </td>
+                }
+            }   
+        }
+    </tr>
 </table>

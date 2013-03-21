@@ -15,11 +15,17 @@ namespace Webshop.Controllers
 
         private WebshopContext db = new WebshopContext();
 
-        public ActionResult Index(string category = "", string subcat1 = "", string subcat2 = "")
+        public ActionResult Index(string category = "", string subcat1 = "", string subcat2 = "", int page = 1, int perPage = 10)
         {
             ViewBag.category = category;
             ViewBag.subcat1 = subcat1;
             ViewBag.subcat2 = subcat2;
+            ViewBag.perPage = perPage;
+            ViewBag.currentPage = page;
+            page = page - 1;
+
+
+
             List<Product> filteredProducts = db.Products.ToList();
             if (!category.Equals(""))
             {
@@ -33,7 +39,14 @@ namespace Webshop.Controllers
             {
                 filteredProducts = filteredProducts.Where(p => p.SubCat2.Equals(subcat2)).ToList();
             }
-            return View(filteredProducts.Take(20));
+            var numberOfPages = filteredProducts.Count() / (float)perPage;
+            var numberOfPagesI = (int)numberOfPages;
+            if (numberOfPages > numberOfPagesI)
+            {
+                numberOfPagesI++;
+            }
+            ViewBag.NumberOfPages = numberOfPagesI;
+            return View(filteredProducts.Skip(page * perPage).Take(perPage));
         }
 
         public ActionResult About()
@@ -43,12 +56,16 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public ActionResult Product(int id, string category = "", string subcat1 = "", string subcat2 = "")
+        public ActionResult Product(int id, string category = "", string subcat1 = "", string subcat2 = "", int page = 1, int perPage = 10)
         {
             ViewBag.category = category;
             ViewBag.subcat1 = subcat1;
             ViewBag.subcat2 = subcat2;
-            return View(db.Products.Find(id));
+            ViewBag.perPage = perPage;
+            ViewBag.currentPage = page;
+            var product = db.Products.Find(id);
+            //todo price formatting
+            return View(product);
         }
 
         public ActionResult Contact()
