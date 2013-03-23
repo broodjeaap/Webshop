@@ -8,7 +8,7 @@
     string subcat2 = (string)(ViewBag.subcat2);
     int numberOfPages = (int)(ViewBag.NumberOfPages);
     ViewBag.Title = category;
-
+    bool evenOdd = false;
 }
 
 <h2>
@@ -22,50 +22,26 @@
         Html.Raw("->" + subcat2);
     }
 </h2>
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImageName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SubCat1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SubCat2)
-        </th>
-        <th></th>
-    </tr>
-
+<table class="product-table">
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
+    <tr onclick="javascript:rowClick(this)" class="product-table-@(evenOdd ? "even" : "odd")-row">
         <td>
             <img src="~/Images/Products/thumb_@item.ImageName" />
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Category)
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td id="priceText">
+            € @(item.Price / 100f)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SubCat1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SubCat2)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Product", new { id=item.ProductID, category = category, subcat1 = subcat1, subcat2 = subcat2, page = currentPage, perPage = perPage })
+            <a href="~/"><img src="~/Images/shoppingBasket.png" /></a>
         </td>
     </tr>
+    evenOdd = !evenOdd;
 }
 </table>
-<table id="product_pages_table">
+<table class="product-pages-table">
     <tr>
         @if(numberOfPages > 15){
             if(currentPage > 1){
@@ -148,3 +124,8 @@
         }
     </tr>
 </table>
+<script type="text/javascript">
+    function rowClick(elem) {
+        window.location = $(elem).find("a").first().attr("href");
+    }
+</script>

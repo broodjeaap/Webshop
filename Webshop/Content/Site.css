@@ -15,9 +15,33 @@
     margin: 0;
 }
 
+.header-login-register-wrapper {
+    float:right;
+    text-align:right;
+    overflow: hidden;
+}
 
-#header_menu_and_login {
+.header-welcome-or-register {
+    width: 50%;
+    float:left;
+}
 
+.header-login-or-logout {
+    overflow: hidden;
+}
+
+.header-menu {
+    width: 100%;
+    margin: 20px 0px 10px 0px;
+}
+
+.header-menu-item {
+    width:32%;
+    float:left;
+    text-align:center;
+    color: #c8c8c8;
+    font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
+    font-size: 1.5em;
 }
 
 #header_login_register {
@@ -78,6 +102,37 @@
 
 .product-propertie-table {
     border: 1px solid black;
+}
+
+.product-table {
+    width: 80%;
+    margin-left: auto ;
+    margin-right: auto ;
+    border-collapse:collapse;
+}
+
+.product-table-even-row {
+    background-color: #fff;
+}
+
+    .product-table-even-row:hover {
+        background-color: #ddd;
+        cursor:pointer;
+    }
+
+.product-table-odd-row {
+    background-color: #eee;
+}
+
+    .product-table-odd-row:hover {
+        background-color: #ddd;
+        cursor:pointer;
+    }
+
+.product-pages-table {
+    margin-left: auto ;
+    margin-right: auto ;
+    text-align: center;
 }
 
 .copyright {

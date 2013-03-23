@@ -16,24 +16,24 @@
                         <p class="header_title">@Html.ActionLink("Webshop", "Index", "Home")</p>
                     </div>
                     <div id="header_menu_and_login" class="clearfix">
-                        <div id="login">
+                        <div class="header-login-register-wrapper">
                             @Html.Partial("_LoginPartial")
                         </div>
-                        <div id="header_menu">
-                            <div id="header_menu_home" class="header_menu_item">
-                                @Html.ActionLink("Home", "Index", "Home")
-                            </div>
-                            <div id="header_menu_about" class="header_menu_item">
-                                @Html.ActionLink("About", "About", "Home")
-                            </div>
-                            <div id="header_menu_contact" class="header_menu_item">
-                                @Html.ActionLink("Contact", "Contact", "Home")
-                            </div>
+                    </div>
+                    <div class="header-menu clearfix">
+                        <div class="header-menu-item">
+                            @Html.ActionLink("Home", "Index", "Home")
+                        </div>
+                        <div class="header-menu-item">
+                            @Html.ActionLink("About", "About", "Home")
+                        </div>
+                        <div class="header-menu-item">
+                            @Html.ActionLink("Contact", "Contact", "Home")
                         </div>
                     </div>
                 </div>
             </header>
-            <div id="clearfix">
+            <div class="clearfix">
                 <div id="sidebar_categories" class="sidebar float-left">
                     @Html.Action("SideBar", "Home", new { category = ViewBag.category, subcat1 = ViewBag.subcat1, subcat2 = ViewBag.subcat2 })
                 </div>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <footer>
-                <div class="copyright">
+                <div class="copyright clear-fix">
                     <p>&copy; @DateTime.Now.Year - Webshop</p>
                 </div>
             </footer>
