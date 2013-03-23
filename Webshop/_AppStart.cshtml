@@ -1,0 +1,6 @@
+﻿@{
+    var context = new Webshop.Models.WebshopContext();
+    context.Products.ToList();
+    
+    WebSecurity.InitializeDatabaseConnection("WebshopContext","Users","UserID","Email",true);
+}

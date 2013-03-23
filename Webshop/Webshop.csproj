@@ -168,8 +168,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductProperty.cs" />
+    <Compile Include="Models\ShoppingCartItem.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\WebshopContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -289,6 +292,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Product.cshtml" />
+    <Content Include="_AppStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\productImages\" />
