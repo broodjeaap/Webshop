@@ -139,6 +139,14 @@
     text-align: center;
 }
 
+.shoppingcart-image {
+    background: url("/Images/shoppingBasket.png") no-repeat center right;
+    display:block; 
+    width:62px;
+    height:50px; 
+    
+}
+
 .copyright {
     text-align: center;
 }

@@ -13,9 +13,9 @@ namespace Webshop.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ShoppingCartItemID { get; set; }
         public int UserID { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public int ProductID { get; set; }
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
         public int Quantity { get; set; }
     }
 }

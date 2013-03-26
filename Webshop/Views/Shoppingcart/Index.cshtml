@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Webshop.Models.ShoppingCartItem>
+
+@{
+    ViewBag.Title = "Index";
+    int totalPrice = 0;
+    bool evenOdd = false;
+}
+
+<h2>Index</h2>
+
+<table class="product-table">
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            Product Name
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            Total
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr class="product-table-@(evenOdd ? "even" : "odd")-row">
+        <td onclick="javascript:rowClick(this)">
+            <img src="~/Images/Products/thumb_@item.Product.ImageName" />
+        </td>
+        <td onclick="javascript:rowClick(this)">
+            @item.Product.Name
+        </td>
+        <td onclick="javascript:rowClick(this)">
+            @(item.Product.Price / 100f)
+            @{totalPrice += item.Product.Price * item.Quantity;}
+        </td>
+        <td>
+            @using (Html.BeginForm("Update", "Shoppingcart", FormMethod.Post, new { id = "updateQuantityForm" + @item.ProductID })) {
+            @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value ="@item.ProductID" />
+                <input type="number" name="quantity" value ="@item.Quantity" />
+            }
+        </td>
+        <td onclick="javascript:rowClick(this)">
+            @((item.Product.Price * item.Quantity) / 100f)
+        </td>
+        <td>
+            @{
+                string js = "javascript:document.getElementById('updateQuantityForm" + @item.ProductID +"').submit()";
+            }
+            <a href="@js">Update</a>
+            @Html.ActionLink("Delete", "Delete", new { id=item.ShoppingCartItemID, quantity = @item.Quantity}) | 
+            @Html.ActionLink("Details", "Product", "Home", new { id = item.ProductID }, new { })
+        </td>
+    </tr>
+    evenOdd = !evenOdd;
+}
+    <tr>
+        <td>
+
+        </td>
+        <td>
+
+        </td>
+        <td>
+
+        </td>
+        <td>
+            Total price:
+        </td>
+        <td>
+            @(totalPrice / 100f)
+        </td>
+    </tr>
+
+</table>
+<script type="text/javascript">
+    function rowClick(elem) {
+        window.location = $(elem).parent().find("a").last().attr("href");
+    }
+</script>

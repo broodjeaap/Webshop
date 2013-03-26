@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td>
-                        winkelwagen zooi
+                        @Html.ActionLink(" ", "Add", "Shoppingcart", new { id = @Model.ProductID }, new { @class = "shoppingcart-image" })
                     </td>
                 </tr>
             </table>

@@ -163,6 +163,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ShoppingcartController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -296,6 +297,7 @@
     <Content Include="_AppStart.cshtml" />
     <Content Include="Views\Account\_AddressPartialCreate.cshtml" />
     <Content Include="Views\Account\_AddressPartial.cshtml" />
+    <Content Include="Views\Shoppingcart\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\productImages\" />
