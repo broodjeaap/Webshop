@@ -151,6 +151,56 @@
     text-align: center;
 }
 
+.order-table {
+    width: 80%;
+    margin-left: auto ;
+    margin-right: auto ;
+    border-collapse:collapse;
+}
+
+.order-table-even-row {
+    background-color: #fff;
+}
+
+    .order-table-even-row:hover {
+        background-color: #ffa;
+        cursor:pointer;
+    }
+
+.order-table-odd-row {
+    background-color: #ffd;
+}
+
+    .order-table-odd-row:hover {
+        background-color: #ffa;
+        cursor:pointer;
+    }
+
+
+.address-table {
+    width: 80%;
+    margin-left: auto ;
+    margin-right: auto ;
+    border-collapse:collapse;
+}
+
+.address-table-even-row {
+    background-color: #fff;
+}
+
+    .address-table-even-row:hover {
+        background-color: #ffa;
+        cursor:pointer;
+    }
+
+.address-table-odd-row {
+    background-color: #ffd;
+}
+
+    .address-table-odd-row:hover {
+        background-color: #ffa;
+        cursor:pointer;
+    }
 
 /* new clearfix */
 .clearfix:after {

@@ -196,6 +196,16 @@ namespace Webshop.Controllers
             return RedirectToAction("Manage");
         }
 
+        public ActionResult Order(int id)
+        {
+            var order = db.Orders.Where(o => o.UserID == WebSecurity.CurrentUserId).Where(o => o.OrderID == id);
+            if (order.Count() == 1)
+            {
+                return View(order.First());
+            }
+            return RedirectToAction("Manage");
+        }
+
         #region Helpers
         private ActionResult RedirectToLocal(string returnUrl)
         {

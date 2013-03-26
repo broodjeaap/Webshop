@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Webshop.Models.Order>
+
+@{
+    bool evenOdd = false;
+}
+<table class="order-table">
+    <tr>
+        <th>
+            Order Date
+        </th>
+        <th>
+            Number of Items
+        </th>
+        <th>
+            Total Price
+        </th>
+        <th>
+            Delivery Address
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr onclick="javascript:rowClick(this)" class="order-table-@(evenOdd ? "even" : "odd")-row">
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderTime)
+        </td>
+        <td>
+            @item.OrderItems.Count
+        </td>
+        <td>
+            @{
+                int total = 0;
+                foreach (var oi in item.OrderItems)
+                {
+                    total += oi.Product.Price * oi.Quantity;
+                }
+            }
+            @(total / 100f)
+        </td>
+        <td>
+            @(item.Address.PostalCode), @(item.Address.City): @item.Address.StreetName @item.Address.StreetNumber
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Order", new { id=item.OrderID })
+        </td>
+    </tr>
+    evenOdd = !evenOdd;
+}
+</table>
+
+<script type="text/javascript">
+    function rowClick(elem) {
+        window.location = $(elem).find("a").last().attr("href");
+    }
+</script>

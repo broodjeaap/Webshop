@@ -170,6 +170,8 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductProperty.cs" />
     <Compile Include="Models\ShoppingCartItem.cs" />
@@ -298,6 +300,10 @@
     <Content Include="Views\Account\_AddressPartialCreate.cshtml" />
     <Content Include="Views\Account\_AddressPartial.cshtml" />
     <Content Include="Views\Shoppingcart\Index.cshtml" />
+    <Content Include="Views\Account\_OrdersPartial.cshtml" />
+    <Content Include="Views\Shoppingcart\PickAddressOrder.cshtml" />
+    <Content Include="Views\Shoppingcart\OrderItemsToAddress.cshtml" />
+    <Content Include="Views\Account\Order.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\productImages\" />

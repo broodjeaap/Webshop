@@ -151,5 +151,43 @@ namespace Webshop.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        public ActionResult PickAddressOrder()
+        {
+            return View(db.Users.Find(WebSecurity.CurrentUserId).Addresses);
+        }
+
+        public ActionResult OrderItemsToAddress(int id)
+        {
+            var result = db.Addresses.Where(a => a.UserID == WebSecurity.CurrentUserId).Where(a => a.AddressID == id);
+            if (result.Count() == 1)
+            {
+                var user = db.Users.Find(WebSecurity.CurrentUserId);
+                var order = new Order();
+                order.User = user;
+                order.UserID = WebSecurity.CurrentUserId;
+                order.AddressID = id;
+                order.OrderTime = DateTime.Now;
+                foreach (var i in user.ShoppingCartItems)
+                {
+                    var oi = new OrderItem();
+                    oi.Order = order;
+                    oi.OrderID = order.OrderID;
+                    oi.Product = i.Product;
+                    oi.ProductID = i.ProductID;
+                    oi.Quantity = i.Quantity;
+                    order.OrderItems.Add(oi);
+                }
+                var items = user.ShoppingCartItems.ToList();
+                for (var a = items.Count() - 1; a >= 0; --a)
+                {
+                    db.ShoppingCartItems.Remove(items[a]);
+                }
+                db.Orders.Add(order);
+                db.SaveChanges();
+                return View();
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

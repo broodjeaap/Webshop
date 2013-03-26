@@ -34,6 +34,14 @@ else
 }
 @Html.Partial("_AddressPartialCreate", emptyAddress)
 
+@if(Model.Orders.Count() > 0){
+    @Html.Partial("_OrdersPartial", Model.Orders)
+} else {
+    <h2>
+        No orders placed.
+    </h2>
+}
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

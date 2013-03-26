@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Webshop.Models.Address>
+
+@{
+    ViewBag.Title = "PickAddressOrder";
+    bool evenOdd = false;
+}
+
+<h2>Pick Address</h2>
+@if(Model.Count() > 0){
+    <table class="address-table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StreetName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StreetNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr onclick="javascript:rowClick(this)" class="address-table-@(evenOdd ? "even" : "odd")-row">
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostalCode)
+            </td>
+            <td>
+                @Html.ActionLink("Pick", "OrderItemsToAddress", new { id = item.AddressID })
+            </td>
+        </tr>
+        evenOdd = !evenOdd;
+    }
+    </table>
+} else {
+    <h2>
+        No address added, @Html.ActionLink("Manage your account", "Manage", "Account") to add an address.
+    </h2>   
+}
+
+<script type="text/javascript">
+    function rowClick(elem) {
+        window.location = $(elem).find("a").last().attr("href");
+    }
+</script>
