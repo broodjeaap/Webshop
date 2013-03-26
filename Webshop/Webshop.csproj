@@ -294,6 +294,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Product.cshtml" />
     <Content Include="_AppStart.cshtml" />
+    <Content Include="Views\Account\_AddressPartialCreate.cshtml" />
+    <Content Include="Views\Account\_AddressPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\productImages\" />

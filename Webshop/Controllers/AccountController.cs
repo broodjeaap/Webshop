@@ -17,6 +17,8 @@ namespace Webshop.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+
+        private WebshopContext db = new WebshopContext();
         //
         // GET: /Account/Login
 
@@ -102,7 +104,7 @@ namespace Webshop.Controllers
                 : "";
             ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             ViewBag.ReturnUrl = Url.Action("Manage");
-            return View();
+            return View(db.Users.Find(WebSecurity.CurrentUserId));
         }
 
         //
@@ -166,6 +168,32 @@ namespace Webshop.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddAddress(Address address)
+        {
+            address.UserID = WebSecurity.CurrentUserId;
+            if (ModelState.IsValid)
+            {
+                db.Users.Find(WebSecurity.CurrentUserId).Addresses.Add(address);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Manage");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAddress(Address address)
+        {
+            address.UserID = WebSecurity.CurrentUserId;
+            if (ModelState.IsValid)
+            {
+                db.Entry(address).State = System.Data.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Manage");
         }
 
         #region Helpers

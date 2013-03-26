@@ -66,6 +66,10 @@
     float: left;
 }
 
+#sidebar-categories {
+    height:100%;
+}
+
 .subcat1 {
     padding-left:15px;
 }
