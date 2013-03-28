@@ -12,15 +12,7 @@
 }
 
 <h2>
-    @category
-    @if (!"".Equals(subcat1))
-    {
-        Html.Raw("->" + subcat1);
-    }
-    @if (!"".Equals(subcat2))
-    {
-        Html.Raw("->" + subcat2);
-    }
+    @category @(!subcat1.Equals("") ? " -> " + subcat1 : "") @(!subcat2.Equals("") ? " -> " + subcat2 : "")
 </h2>
 <table class="product-table">
 @foreach (var item in Model) {
@@ -32,13 +24,13 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td id="priceText">
-            € @(item.Price / 100f)
+            € @Webshop.Models.Product.FormatPrice(item.Price)
         </td>
         <td>
             @Html.ActionLink(" ", "Add", "Shoppingcart", new { id = item.ProductID}, new { @class = "shoppingcart-image" })
         </td>
         <td>
-            @Html.ActionLink("Details", "Product", new { id=item.ProductID, category = category, subcat1 = subcat1, subcat2 = subcat2, page = currentPage, perPage = perPage })
+            @Html.ActionLink("Details", "Product", new { id=item.ProductID, page = currentPage, perPage = perPage })
         </td>
     </tr>
     evenOdd = !evenOdd;

@@ -15,6 +15,7 @@ namespace Webshop.Controllers
     {
 
         private WebshopContext db = new WebshopContext();
+
         //
         // GET: /Shoppingcart/
 

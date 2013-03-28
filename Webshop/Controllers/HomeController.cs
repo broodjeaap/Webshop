@@ -51,20 +51,19 @@ namespace Webshop.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your app description page.";
+            ViewBag.Message = "Webshop opdracht voor PRGX";
 
             return View();
         }
 
-        public ActionResult Product(int id, string category = "", string subcat1 = "", string subcat2 = "", int page = 1, int perPage = 10)
+        public ActionResult Product(int id, int page = 1, int perPage = 10)
         {
-            ViewBag.category = category;
-            ViewBag.subcat1 = subcat1;
-            ViewBag.subcat2 = subcat2;
+            var product = db.Products.Find(id);
+            ViewBag.category = product.Category;
+            ViewBag.subcat1 = product.SubCat1;
+            ViewBag.subcat2 = product.SubCat2;
             ViewBag.perPage = perPage;
             ViewBag.currentPage = page;
-            var product = db.Products.Find(id);
-            //todo price formatting
             return View(product);
         }
 

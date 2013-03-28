@@ -7,7 +7,7 @@
 
 
 <fieldset>
-    <legend><h2>@Html.DisplayFor(model => model.Name)</h2></legend>
+    <legend><h3>@Model.Category @(!Model.SubCat1.Equals("") ? "-> " + @Model.SubCat1 : "") @(!Model.SubCat2.Equals("") ? "-> " + @Model.SubCat2 : "") -> @Html.DisplayFor(model => model.Name)</h3></legend>
     <div class="desc-image-price-wrapper">
         <div>
             <div class="product-desc-div">
@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <td id="priceText">
-                        € @(Model.Price / 100f)
+                        € @Webshop.Models.Product.FormatPrice(Model.Price)
                     </td>
                 </tr>
                 <tr>
