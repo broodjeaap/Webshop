@@ -34,12 +34,33 @@ else
 }
 @Html.Partial("_AddressPartialCreate", emptyAddress)
 
-@if(Model.Orders.Count() > 0){
+@if(Model.Orders.Count() > 0)
+{
     @Html.Partial("_OrdersPartial", Model.Orders)
-} else {
-    <h2>
-        No orders placed.
-    </h2>
+} 
+else 
+{
+    <fieldset>
+        <legend>Orders</legend>
+        <h2>
+            No orders placed.
+        </h2>
+    </fieldset>
+    
+}
+
+@if (Model.Tickets.Count() > 0)
+{
+    @Html.Partial("_TicketsPartial", Model.Tickets)
+}
+else 
+{
+    <fieldset>
+        <legend>Tickets</legend>
+        <h2>
+            No tickets
+        </h2>
+    </fieldset>
 }
 
 @section Scripts {

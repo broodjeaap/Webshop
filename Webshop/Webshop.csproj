@@ -165,18 +165,24 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\ShoppingcartController.cs" />
+    <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\TicketState.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductProperty.cs" />
     <Compile Include="Models\ShoppingCartItem.cs" />
+    <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\TicketComment.cs" />
+    <Compile Include="Models\TicketEvent.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserType.cs" />
     <Compile Include="Models\WebshopContext.cs" />
     <Compile Include="Models\WebshopDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -307,6 +313,8 @@
     <Content Include="Views\Shoppingcart\OrderItemsToAddress.cshtml" />
     <Content Include="Views\Account\Order.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Account\_TicketsPartial.cshtml" />
+    <Content Include="Views\Ticket\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\productImages\" />

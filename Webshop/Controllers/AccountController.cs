@@ -81,9 +81,17 @@ namespace Webshop.Controllers
                 // Attempt to register the user
                 try
                 {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
-                    WebSecurity.Login(model.UserName, model.Password);
-                    return RedirectToAction("Index", "Home");
+                    if (!WebSecurity.UserExists(model.UserName))
+                    {
+                        var user = new User();
+                        user.Email = model.UserName;
+                        db.Users.Add(user);
+                        db.SaveChanges();
+                        WebSecurity.CreateAccount(model.UserName, model.Password);
+                        WebSecurity.Login(model.UserName, model.Password);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    
                 }
                 catch (MembershipCreateUserException e)
                 {

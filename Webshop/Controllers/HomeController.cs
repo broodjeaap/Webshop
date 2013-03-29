@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using WebMatrix.WebData;
 using Webshop.Models;
 
 namespace Webshop.Controllers
@@ -69,8 +70,17 @@ namespace Webshop.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            return View();
+        }
 
+        [HttpPost]
+        [Authorize]
+        public ActionResult Contact(Ticket t)
+        {
+            ViewBag.Message = "Ticket send.";
+            t.UserID = WebSecurity.CurrentUserId;
+            db.Tickets.Add(t);
+            db.SaveChanges();
             return View();
         }
 

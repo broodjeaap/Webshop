@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Webshop.Models.Ticket>
+
+@{
+    bool evenOdd = false;
+}
+<fieldset>
+    <legend>Tickets</legend>
+    <table class="address-table">
+        <tr>
+            <th>
+                Subject
+            </th>
+            <th>
+                Created On
+            </th>
+            <th>
+                Comments
+            </th>
+            <th>
+                State
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr onclick="javascript:rowClick(this)" class="address-table-@(evenOdd ? "even" : "odd")-row">
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketTitle)
+            </td>
+            <td>
+                @item.TicketCreationDate
+            </td>
+            <td>
+                @item.TicketComments.Count()
+            </td>
+            <td>
+                @item.TicketState
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Index", "Ticket", new { id = item.TicketID }, new { })
+            </td>
+        </tr>
+    }
+
+    </table>
+</fieldset>
+
+<script type="text/javascript">
+    function rowClick(elem) {
+        window.location = $(elem).find("a").last().attr("href");
+    }
+</script>

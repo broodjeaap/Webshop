@@ -1,0 +1,74 @@
+﻿@model Webshop.Models.Ticket
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<fieldset>
+    <legend>Ticket</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketTitle)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketTitle)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketCreationDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketCreationDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TicketBody)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TicketBody)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UserID)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UserID)
+    </div>
+</fieldset>
+
+@foreach (var item in Model.TicketComments) {
+    <h3>
+        @item.User.Email
+    </h3>
+    <h3>
+        @item.CommentPostTime
+    </h3>
+    <div class="ticket-comment-body">
+        @item.Text
+    </div>
+}
+
+<div class="ticket-div">
+    <fieldset>
+        <legend>
+            <h2>
+                Create Ticket
+            </h2>
+        </legend>
+        @using (Html.BeginForm("Contact", "Home", FormMethod.Post))
+        {
+            @Html.Raw("Subject: ") <br />
+            <input id="TicketTitle" type="text" value="" name="TicketTitle" size="50"> <br />
+            @Html.Raw("Message:");<br />
+            <textarea name ="TicketBody" rows="18" cols ="50"></textarea> <br />
+
+            <input type="submit" value="Submit ticket" />
+        }
+    </fieldset>
+</div>
+
+<p>
+    @Html.ActionLink("Back to Account", "Manage", "Account")
+</p>

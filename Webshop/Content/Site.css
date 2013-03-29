@@ -67,7 +67,14 @@
 }
 
 #sidebar-categories {
-    height:100%;
+    float:left;
+}
+
+.main-content {
+    width: 80%;
+    float: left;
+    margin-left: auto ;
+    margin-right: auto ;
 }
 
 .subcat1 {
@@ -206,6 +213,15 @@
     margin-left: auto ;
     margin-right: auto ;
     text-align: center;
+}
+
+.contact-div {
+    float: left;
+    width: 35%;
+}
+.ticket-div {
+    float: left;
+    width: 60%;
 }
 
 .sidebar-search-div {
