@@ -1,0 +1,131 @@
+﻿@model IEnumerable<Webshop.Models.Product>
+
+@{
+    ViewBag.Title = "Search " + ViewBag.query;
+    string query = ViewBag.Query;
+    var numberOfPages = (ViewBag.numberOfPages != null ? ViewBag.numberOfPages : 0);
+    int currentPage = (ViewBag.currentPage != null ? ViewBag.currentPage : 0);
+    int perPage = (ViewBag.perPage != null ? ViewBag.perPage : 0);
+    
+    bool evenOdd = false;
+}
+
+<h2>Search Results for: '@query'</h2>
+<div class="search-page-div">
+    @using (Html.BeginForm("Index", "Search", FormMethod.Get)) {
+        <input type="text" name="query" id="query" value="@(query.Equals("") ? "Search" : query)" onclick="javascript: if ($(this).attr('value') == 'Search') { $(this).attr('value', ''); }" onblur="javascript:if($(this).attr('value') == '') { $(this).attr('value', 'Search');}" size="100" />
+        <input type="submit" value="Search" />
+    }
+</div>
+
+
+<table class="product-table">
+@foreach (var item in Model) {
+    <tr onclick="javascript:rowClick(this)" class="product-table-@(evenOdd ? "even" : "odd")-row">
+        <td>
+            <img src="~/Images/Products/thumb_@item.ImageName" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td id="priceText">
+            € @Webshop.Models.Product.FormatPrice(item.Price)
+        </td>
+        <td>
+            @Html.ActionLink(" ", "Add", "Shoppingcart", new { id = item.ProductID}, new { @class = "shoppingcart-image" })
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Product", "Home", new { id = item.ProductID, page = currentPage, perPage = perPage }, new { })
+        </td>
+    </tr>
+    evenOdd = !evenOdd;
+}
+</table>
+<table class="product-pages-table">
+    <tr>
+        @if(numberOfPages > 15){
+            if(currentPage > 1){
+                <td>
+                    @Html.ActionLink("First", "Index", new { query = query, page = 1, perPage = perPage })
+                </td>
+                <td>
+                    @Html.ActionLink("Previous", "Index", new { query = query, page = currentPage - 1, perPage = perPage })
+                </td>
+            }
+            if(currentPage >= 4){
+                for (var a = 1; a <= 4; ++a) //1,2,3,4
+                {
+                    <td>
+                        @Html.ActionLink(a.ToString(), "Index", new { query = query, page = a, perPage = perPage })
+                    </td>
+                }
+                <td>
+                    ...
+                </td>
+            }
+
+            for (var a = currentPage - 3; a < currentPage; ++a) // 3 pages before current page
+            {
+                if (a <= 0)
+                {
+                    continue;
+                }
+                <td>
+                    @Html.ActionLink(a.ToString(), "Index", new { query = query, page = a, perPage = perPage })
+                </td>       
+            }
+            
+            <td>
+                @currentPage
+            </td>
+            
+            for (var a = currentPage + 1; a <= currentPage + 3; ++a) // 3 pages after current page
+            {
+                if (a >= numberOfPages)
+                {
+                    continue;
+                }
+                <td>
+                    @Html.ActionLink(a.ToString(), "Index", new { query = query, page = a, perPage = perPage })
+                </td>       
+            }
+            <td>
+                ...
+            </td>
+            for (int a = numberOfPages - 4; a <= numberOfPages; ++a) //last pages
+            {
+                <td>
+                    @Html.ActionLink(a.ToString(), "Index", new { query = query, page = a, perPage = perPage })
+                </td>
+            }
+            if (currentPage < numberOfPages)
+            {
+                <td>
+                    @Html.ActionLink("Next", "Index", new { query = query, page = currentPage + 1, perPage = perPage })
+                </td>
+                <td>
+                    @Html.ActionLink("Last", "Index", new { query = query,  page = numberOfPages, perPage = perPage })
+                </td>
+            }
+        } else {
+            for (var a = 1; a < numberOfPages; ++a)
+            {
+                if (a == currentPage)
+                {
+                    <td>
+                        @a
+                    </td>
+                } else {
+                    <td>
+                        @Html.ActionLink(a.ToString(), "Index", new { query = query, page = a, perPage = perPage })
+                    </td>
+                }
+            }   
+        }
+    </tr>
+</table>
+<script type="text/javascript">
+    function rowClick(elem) {
+        window.location = $(elem).find("a").last().attr("href");
+    }
+</script>

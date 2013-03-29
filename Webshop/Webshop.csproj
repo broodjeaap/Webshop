@@ -163,6 +163,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\ShoppingcartController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -177,6 +178,7 @@
     <Compile Include="Models\ShoppingCartItem.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\WebshopContext.cs" />
+    <Compile Include="Models\WebshopDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +306,7 @@
     <Content Include="Views\Shoppingcart\PickAddressOrder.cshtml" />
     <Content Include="Views\Shoppingcart\OrderItemsToAddress.cshtml" />
     <Content Include="Views\Account\Order.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\productImages\" />

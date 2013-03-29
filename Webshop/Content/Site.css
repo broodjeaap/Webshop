@@ -202,6 +202,16 @@
         cursor:pointer;
     }
 
+.search-page-div {
+    margin-left: auto ;
+    margin-right: auto ;
+    text-align: center;
+}
+
+.sidebar-search-div {
+
+}
+
 /* new clearfix */
 .clearfix:after {
     visibility: hidden;

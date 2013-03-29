@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Webshop.Models
 {
-    public class WebshopContext : DbContext
+    public class WebshopContext : DbContext, WebshopDAO
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductProperty> ProductProperties { get; set; }

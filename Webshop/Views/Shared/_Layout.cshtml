@@ -35,6 +35,12 @@
             </header>
             <div class="clearfix">
                 <div id="sidebar-categories" class="sidebar float-left">
+                    <div class="sidebar-search-div">
+                            @using (Html.BeginForm("Index", "Search", FormMethod.Get)) {
+                            <input type="text" name="query" id="query" value="Search" onclick="javascript: if ($(this).attr('value') == 'Search') { $(this).attr('value', ''); }" onblur="javascript:if($(this).attr('value') == '') { $(this).attr('value', 'Search');}" size="18" /><br />
+                            <input type="submit" value="Search" />
+                        }
+                    </div>
                     @Html.Action("SideBar", "Home", new { category = ViewBag.category, subcat1 = ViewBag.subcat1, subcat2 = ViewBag.subcat2 })
                 </div>
                 <div id="body" class="content">
