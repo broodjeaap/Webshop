@@ -262,6 +262,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\tabber-minimized.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -314,7 +315,12 @@
     <Content Include="Views\Account\Order.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Account\_TicketsPartial.cshtml" />
+    <Content Include="Views\Ticket\Ticket.cshtml" />
     <Content Include="Views\Ticket\Index.cshtml" />
+    <Content Include="Views\Ticket\AdminIndex.cshtml" />
+    <Content Include="Views\Ticket\Assign.cshtml" />
+    <Content Include="Views\Ticket\EventHistory.cshtml" />
+    <Content Include="Views\Ticket\HelpIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\productImages\" />

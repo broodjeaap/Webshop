@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Webshop.Models.User>
+
+@{
+    var Ticket = ((Webshop.Models.Ticket)ViewBag.Ticket);
+    ViewBag.Title = "Assign: " + Ticket.TicketTitle;
+    bool evenOdd = false;
+}
+<fieldset>
+    <legend>@Ticket.TicketTitle: @Ticket.TicketCreationDate</legend>
+
+    <fieldset>
+        <legend>@Ticket.User.Email</legend>
+        @Ticket.TicketBody
+    </fieldset>
+</fieldset>
+
+<fieldset>
+    <legend>Assign To:</legend>
+    <table class="address-table">
+        <tr>
+            <th>
+                UserID
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Assigned
+            </th>
+            <th></th>
+        </tr>
+    @foreach (var item in Model) {
+        <tr onclick="javascript:rowClick(@item.UserID)" class="address-table-@(evenOdd ? "even" : "odd")-row">
+            <td>
+                @item.UserID
+            </td>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @item.Tickets.Count()
+            </td>
+            <td>
+                @using (Html.BeginForm("Assign", "Ticket", FormMethod.Post, new { id = ("Assign" + item.UserID) }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="TicketID" value="@Ticket.TicketID" />
+                    <input type="hidden" name="UserID" value="@item.UserID" />
+                    <input type="submit" value="Assign" />
+                }
+            </td>
+        </tr>
+        evenOdd = !evenOdd;
+    }
+
+    </table>
+</fieldset>
+<script type="text/javascript">
+    function rowClick(id) {
+        document.getElementById('Assign' + id).submit();
+    }
+</script>

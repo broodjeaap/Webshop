@@ -25,7 +25,7 @@ namespace Webshop.Models
         public TicketState TicketState { get; set; }
         public string TicketBody { get; set; }
         public int UserID { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public virtual ICollection<TicketComment> TicketComments { get; set; }
         public virtual ICollection<TicketEvent> TicketEvents { get; set; }
     }

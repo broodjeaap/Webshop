@@ -18,6 +18,7 @@ namespace Webshop.Models
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketComment> TicketComments { get; set; }
+        public DbSet<TicketEvent> TicketEvents { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

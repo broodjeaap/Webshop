@@ -1,0 +1,49 @@
+﻿@model Webshop.Models.Ticket
+
+@{
+    ViewBag.Title = @Model.TicketTitle;
+    var lastTicketEvent = Model.TicketEvents.OrderBy(t => t.EventTime).Last();
+}
+<fieldset>
+    <legend>@Model.TicketTitle: @Model.TicketCreationDate</legend>
+
+    <fieldset>
+        <legend>@Model.User.Email</legend>
+        @Model.TicketBody
+    </fieldset>
+    <div class="last-ticket-event">
+        On @lastTicketEvent.EventTime: @lastTicketEvent.text <br /> 
+        @Html.ActionLink("View Complete History", "EventHistory", new { id = Model.TicketID } )
+    </div>
+<h3>
+    Comments: 
+</h3>
+@foreach (var item in Model.TicketComments.OrderBy(c => c.CommentPostTime)) {
+    <fieldset>
+        <legend>@item.User.Email: @item.CommentPostTime</legend>
+        <div class="ticket-comment-body">
+            @item.Text
+        </div>
+    </fieldset>
+}
+    <div>
+        <fieldset>
+            <legend>
+                <h2>
+                    Post Comment
+                </h2>
+            </legend>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(modelItem => modelItem.TicketID)
+                <textarea name ="Text" rows="7" cols ="90"></textarea> <br />
+                <input type="submit" value="Submit ticket" />
+            }
+        </fieldset>
+    </div>
+
+    <p>
+        @Html.ActionLink("Back to Account", "Manage", "Account")
+    </p>
+</fieldset>

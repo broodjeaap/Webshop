@@ -36,7 +36,7 @@ else
 
 @if(Model.Orders.Count() > 0)
 {
-    @Html.Partial("_OrdersPartial", Model.Orders)
+    @Html.Partial("_OrdersPartial", Model.Orders.OrderBy(o => o.OrderTime))
 } 
 else 
 {
@@ -51,7 +51,7 @@ else
 
 @if (Model.Tickets.Count() > 0)
 {
-    @Html.Partial("_TicketsPartial", Model.Tickets)
+    @Html.Partial("_TicketsPartial", Model.Tickets.OrderBy(t => t.TicketCreationDate))
 }
 else 
 {

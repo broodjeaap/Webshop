@@ -1,0 +1,24 @@
+﻿@model Webshop.Models.Ticket
+
+@{
+    ViewBag.Title = "EventHistory";
+}
+
+<h2>Ticket Event History for @Model.TicketTitle</h2>
+
+<table>
+@foreach (var item in Model.TicketEvents.OrderBy(te => te.EventTime)) {
+    <tr>
+        <td>
+            @item.EventTime
+        </td>
+        <td>
+            @item.text
+        </td>
+        <td>
+            @item.NewTicketState
+        </td>
+    </tr>
+}
+
+</table>

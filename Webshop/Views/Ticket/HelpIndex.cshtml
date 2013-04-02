@@ -28,6 +28,7 @@
             @Html.DisplayFor(modelItem => item.TicketCreationDate)
         </td>
         <td>
+            @Html.ActionLink("Collaberate", "Assign", new { id = item.TicketID }) | 
             @Html.ActionLink(LinkText, ActionName, new { id=item.TicketID })
         </td>
     </tr>

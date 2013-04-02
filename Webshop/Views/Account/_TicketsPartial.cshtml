@@ -37,7 +37,7 @@
                 @item.TicketState
             </td>
             <td>
-                @Html.ActionLink("Details", "Index", "Ticket", new { id = item.TicketID }, new { })
+                @Html.ActionLink("Details", "Ticket", "Ticket", new { id = item.TicketID }, new { })
             </td>
         </tr>
     }
