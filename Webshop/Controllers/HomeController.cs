@@ -78,8 +78,11 @@ namespace Webshop.Controllers
         public ActionResult Contact(Ticket t)
         {
             ViewBag.Message = "Ticket send.";
-            t.UserID = WebSecurity.CurrentUserId;
+            t.OwnerUserID = WebSecurity.CurrentUserId;
             db.Tickets.Add(t);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            t.Users.Add(user);
+            user.Tickets.Add(t);
             var ticketEvent = new TicketEvent();
             ticketEvent.text = "Ticket created";
             db.TicketEvents.Add(ticketEvent);

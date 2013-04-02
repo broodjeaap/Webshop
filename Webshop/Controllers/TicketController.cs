@@ -18,24 +18,15 @@ namespace Webshop.Controllers
             var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
-                ViewBag.LinkText = "View";
-                ViewBag.ActionName = "Ticket";
-                ViewBag.Title = "Your Tickets";
                 return View(user.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
             }
             if (user.UserType == UserType.Help)
             {
-                ViewBag.LinkText = "View";
-                ViewBag.ActionName = "Ticket";
-                ViewBag.Title = "Your Tickets";
-                return View("HelpIndex",user.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
+                return View("HelpIndex", user.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
             }
             if (user.UserType == UserType.Service)
             {
-                ViewBag.LinkText = "Assign";
-                ViewBag.ActionName = "Assign";
-                ViewBag.Title = "New Tickets";
-                return View(db.Tickets.Where(t => t.TicketState == TicketState.New).OrderBy(t => t.TicketCreationDate).ToList());
+                return View("ServiceIndex", db.Tickets.Where(t => t.TicketState == TicketState.New).OrderBy(t => t.TicketCreationDate).ToList());
             }
             return View("AdminIndex", db.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
         }
@@ -44,7 +35,7 @@ namespace Webshop.Controllers
         {
             var user = db.Users.Find(WebSecurity.CurrentUserId);
             var ticket = db.Tickets.Find(id);
-            if (!user.Tickets.Contains(ticket))
+            if (!user.Tickets.Contains(ticket) && user.UserType != UserType.Admin)
             {
                 return RedirectToAction("Index");
             }
@@ -55,10 +46,11 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Ticket(TicketComment ticketComment)
         {
-            ticketComment.UserID = WebSecurity.CurrentUserId;
-            if (ticketComment.Text != null && !ticketComment.Text.Trim().Equals("") && db.Tickets.Find(ticketComment.TicketID).UserID == ticketComment.UserID)
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            ticketComment.UserID = user.UserID;
+            if (ticketComment.Text != null && !ticketComment.Text.Trim().Equals("") && (db.Tickets.Find(ticketComment.TicketID).Users.Contains(user) || user.UserType == UserType.Admin))
             {
-                ticketComment.User = db.Users.Find(ticketComment.UserID);
+                ticketComment.User = user;
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
             }
@@ -79,7 +71,7 @@ namespace Webshop.Controllers
             }
             var Ticket = db.Tickets.Find(id);
             ViewBag.Ticket = Ticket;
-            return View(db.Users.Where(u => u.UserType == UserType.Help));
+            return View(db.Users.Where(u => u.UserType == UserType.Help && u.UserID != user.UserID));
         }
 
         [HttpPost]
@@ -87,6 +79,10 @@ namespace Webshop.Controllers
         public ActionResult Assign(int TicketID, int UserID)
         {
             var user = db.Users.Find(WebSecurity.CurrentUserId);
+            if (user.UserID == UserID)
+            {
+                return RedirectToAction("Index");
+            }
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index");
@@ -100,7 +96,9 @@ namespace Webshop.Controllers
             if (!assignedToUser.Tickets.Contains(ticket))
             {
                 assignedToUser.Tickets.Add(ticket);
+                ticket.Users.Add(assignedToUser);
                 ticket.TicketState = TicketState.Open;
+
                 var ticketEvent = new TicketEvent();
                 ticketEvent.NewTicketState = TicketState.Open;
                 ticketEvent.text = "Ticket " + ticket.TicketID + " ( " + ticket.TicketTitle + " ) assigned to " + assignedToUser.Email + " by " + user.Email;

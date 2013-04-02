@@ -2,8 +2,6 @@
 
 @{
     bool evenOdd = false;
-    var LinkText = ((string)ViewBag.LinkText);
-    var ActionName = ((string)ViewBag.ActionName);
 }
 
 <h2>New Tickets</h2>
@@ -28,7 +26,7 @@
             @Html.DisplayFor(modelItem => item.TicketCreationDate)
         </td>
         <td>
-            @Html.ActionLink(LinkText, ActionName, new { id=item.TicketID })
+            @Html.ActionLink("View" , "Ticket", new { id=item.TicketID })
         </td>
     </tr>
     evenOdd = !evenOdd;

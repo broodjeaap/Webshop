@@ -13,6 +13,7 @@ namespace Webshop.Models
         {
             TicketCreationDate = DateTime.UtcNow;
             TicketState = TicketState.New;
+            Users = new HashSet<User>();
             TicketComments = new HashSet<TicketComment>();
             TicketEvents = new HashSet<TicketEvent>();
         }
@@ -24,8 +25,10 @@ namespace Webshop.Models
         public DateTime TicketCreationDate { get; set; }
         public TicketState TicketState { get; set; }
         public string TicketBody { get; set; }
-        public int UserID { get; set; }
-        public virtual User User { get; set; }
+        public int OwnerUserID { get; set; }
+        [ForeignKey("OwnerUserID")]
+        public virtual User Owner { get; set; }
+        public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<TicketComment> TicketComments { get; set; }
         public virtual ICollection<TicketEvent> TicketEvents { get; set; }
     }

@@ -8,7 +8,7 @@
     <legend>@Model.TicketTitle: @Model.TicketCreationDate</legend>
 
     <fieldset>
-        <legend>@Model.User.Email</legend>
+        <legend>@Model.Owner.Email</legend>
         @Model.TicketBody
     </fieldset>
     <div class="last-ticket-event">
@@ -33,7 +33,7 @@
                     Post Comment
                 </h2>
             </legend>
-            @using (Html.BeginForm())
+            @using (Html.BeginForm("Ticket","Ticket"))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(modelItem => modelItem.TicketID)
