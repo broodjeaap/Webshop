@@ -11,7 +11,7 @@ namespace Webshop.Models
     {
         public TicketEvent()
         {
-            EventTime = DateTime.UtcNow;
+            EventTime = DateTime.Now;
             NewTicketState = TicketState.New;
         }
 

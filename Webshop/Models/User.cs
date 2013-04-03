@@ -15,6 +15,7 @@ namespace Webshop.Models
             Addresses = new HashSet<Address>();
             ShoppingCartItems = new HashSet<ShoppingCartItem>();
             Orders = new HashSet<Order>();
+            UserTicketLinks = new HashSet<UserTicketLink>();
             UserType = UserType.Customer;
         }
 
@@ -26,6 +27,6 @@ namespace Webshop.Models
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual ICollection<UserTicketLink> UserTicketLinks { get; set; }
     }
 }

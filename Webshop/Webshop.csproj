@@ -182,6 +182,7 @@
     <Compile Include="Models\TicketComment.cs" />
     <Compile Include="Models\TicketEvent.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserTicketLink.cs" />
     <Compile Include="Models\UserType.cs" />
     <Compile Include="Models\WebshopContext.cs" />
     <Compile Include="Models\WebshopDAO.cs" />
@@ -262,7 +263,6 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\tabber-minimized.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

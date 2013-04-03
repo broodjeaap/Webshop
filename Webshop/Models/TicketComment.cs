@@ -11,7 +11,7 @@ namespace Webshop.Models
     {
         public TicketComment()
         {
-            CommentPostTime = DateTime.UtcNow;
+            CommentPostTime = DateTime.Now;
         }
 
         [Key]

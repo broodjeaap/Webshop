@@ -34,34 +34,32 @@ else
 }
 @Html.Partial("_AddressPartialCreate", emptyAddress)
 
+<fieldset>
+    <legend>Orders</legend>
 @if(Model.Orders.Count() > 0)
 {
     @Html.Partial("_OrdersPartial", Model.Orders.OrderBy(o => o.OrderTime))
 } 
 else 
 {
-    <fieldset>
-        <legend>Orders</legend>
-        <h2>
-            No orders placed.
-        </h2>
-    </fieldset>
-    
+    <h2>
+        No orders placed.
+    </h2>
 }
-
-@if (Model.Tickets.Count() > 0)
-{
-    @Html.Partial("_TicketsPartial", Model.Tickets.OrderBy(t => t.TicketCreationDate))
-}
-else 
-{
-    <fieldset>
-        <legend>Tickets</legend>
+</fieldset>
+<fieldset>
+    <legend><h3>@Html.ActionLink("Tickets", "Index","Ticket")</h3></legend>
+    @if (Model.UserTicketLinks.Count() > 0)
+    {
+        @Html.Partial("_TicketsPartial", Model.UserTicketLinks.Select(utl => utl.Ticket).OrderBy(t => t.TicketCreationDate))
+    }
+    else 
+    {
         <h2>
             No tickets
         </h2>
-    </fieldset>
-}
+    }
+</fieldset>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

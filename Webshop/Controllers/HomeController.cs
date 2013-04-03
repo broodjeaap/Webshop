@@ -81,8 +81,14 @@ namespace Webshop.Controllers
             t.OwnerUserID = WebSecurity.CurrentUserId;
             db.Tickets.Add(t);
             var user = db.Users.Find(WebSecurity.CurrentUserId);
-            t.Users.Add(user);
-            user.Tickets.Add(t);
+
+            var userTicketLink = new UserTicketLink();
+            userTicketLink.UserID = user.UserID;
+            userTicketLink.User = user;
+            userTicketLink.TicketID = t.TicketID;
+            userTicketLink.Ticket = t;
+            db.UserTicketLinks.Add(userTicketLink);
+
             var ticketEvent = new TicketEvent();
             ticketEvent.text = "Ticket created";
             db.TicketEvents.Add(ticketEvent);

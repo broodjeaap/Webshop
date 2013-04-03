@@ -38,7 +38,7 @@
                 @item.Email
             </td>
             <td>
-                @item.Tickets.Count()
+                @item.UserTicketLinks.Count()
             </td>
             <td>
                 @using (Html.BeginForm("Assign", "Ticket", FormMethod.Post, new { id = ("Assign" + item.UserID) }))
