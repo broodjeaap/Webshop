@@ -1,23 +1,52 @@
-﻿@model IEnumerable<Webshop.Models.Ticket>
+﻿@model IEnumerable<Webshop.Models.UserTicketLink>
 
 @{
     bool evenOdd = false;
 }
 
-<h2>New Tickets</h2>
+<h2>Your tickets:</h2>
 
 <table class="address-table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.TicketTitle)
+            Ticket Subject
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TicketCreationDate)
+            Ticket Creation Date
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
+    <tr>
+        <td>
+            <h2>Updated Tickets</h2>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+@foreach (var item in Model.Where(utl => utl.LastViewed.CompareTo(utl.Ticket.LastCommentDate) <= 0).Select(u => u.Ticket))
+{
+    <tr onclick="javascript:rowClick(this)" class="address-table-@(evenOdd ? "even" : "odd")-row">
+        <td>
+            @Html.DisplayFor(modelItem => item.TicketTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TicketCreationDate)
+        </td>
+        <td>
+            @Html.ActionLink("View", "Ticket", new { id = item.TicketID })
+        </td>
+    </tr>
+        evenOdd = !evenOdd;
+}
+    <tr>
+        <td>
+            <h2>Other Tickets</h2>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+@foreach (var item in Model.Where(utl => utl.LastViewed.CompareTo(utl.Ticket.LastCommentDate) > 0).Select(u => u.Ticket))
+{
     <tr onclick="javascript:rowClick(this)" class="address-table-@(evenOdd ? "even" : "odd")-row">
         <td>
             @Html.DisplayFor(modelItem => item.TicketTitle)

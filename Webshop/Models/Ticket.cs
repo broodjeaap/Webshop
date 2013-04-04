@@ -12,6 +12,7 @@ namespace Webshop.Models
         public Ticket()
         {
             TicketCreationDate = DateTime.Now;
+            LastCommentDate = TicketCreationDate;
             TicketState = TicketState.New;
             TicketComments = new HashSet<TicketComment>();
             TicketEvents = new HashSet<TicketEvent>();
@@ -23,6 +24,7 @@ namespace Webshop.Models
         public int TicketID { get; set; }
         public string TicketTitle { get; set; }
         public DateTime TicketCreationDate { get; set; }
+        public DateTime LastCommentDate { get; set; }
         public TicketState TicketState { get; set; }
         public string TicketBody { get; set; }
         public int OwnerUserID { get; set; }

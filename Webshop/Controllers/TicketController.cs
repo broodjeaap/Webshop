@@ -16,19 +16,25 @@ namespace Webshop.Controllers
         public ActionResult Index()
         {
             var user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user.UserType == UserType.Customer)
+            switch (user.UserType)
             {
-                return View(user.UserTicketLinks.Select(utl => utl.Ticket).OrderBy(t => t.TicketCreationDate).ToList());
-            }
-            if (user.UserType == UserType.Help)
-            {
-                return View("HelpIndex", user.UserTicketLinks.Select(utl => utl.Ticket).OrderBy(t => t.TicketCreationDate).ToList());
-            }
-            if (user.UserType == UserType.Service)
-            {
-                return View("ServiceIndex", db.Tickets.Where(t => t.TicketState == TicketState.New).OrderBy(t => t.TicketCreationDate).ToList());
-            }
-            return View("AdminIndex", db.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
+                case UserType.Admin:
+                    {
+                        return View("AdminIndex", db.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
+                    }
+                case UserType.Customer:
+                    {
+                        return View(user.UserTicketLinks.OrderBy(utl => utl.Ticket.TicketCreationDate).ToList());
+                    }
+                case UserType.Help:
+                    {
+                        return View("HelpIndex", user.UserTicketLinks.OrderBy(utl => utl.Ticket.TicketCreationDate).ToList());
+                    }
+                default:
+                    {
+                        return View("ServiceIndex", db.Tickets.Where(t => t.TicketState == TicketState.New).OrderBy(t => t.TicketCreationDate).ToList());
+                    }
+            }            
         }
 
         public ActionResult Ticket(int id)
@@ -59,8 +65,12 @@ namespace Webshop.Controllers
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
             }
-            db.UserTicketLinks.Find(user.UserID, ticketComment.TicketID).LastViewed = DateTime.Now;
-            db.SaveChanges();
+            if (user.UserType != UserType.Admin)
+            {
+                db.UserTicketLinks.Find(user.UserID, ticketComment.TicketID).LastViewed = DateTime.Now;
+                db.Tickets.Find(ticketComment.TicketID).LastCommentDate = DateTime.Now;
+                db.SaveChanges();
+            }
             return View(db.Tickets.Find(ticketComment.TicketID));
         }
 

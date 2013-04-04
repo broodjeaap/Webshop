@@ -1,6 +1,42 @@
 ﻿@{
     var context = new Webshop.Models.WebshopContext();
     context.Products.ToList();
-    
-    WebSecurity.InitializeDatabaseConnection("WebshopContext","Users","UserID","Email",true);
+    WebSecurity.InitializeDatabaseConnection("WebshopContext", "Users", "UserID", "Email", true);
+    if (context.Users.Where(u => u.Email.Equals("admin")).Count() == 0)
+    {
+        var user = new Webshop.Models.User();
+        user.Email = "admin";
+        user.UserType = Webshop.Models.UserType.Admin;
+        context.Users.Add(user);
+        user = new Webshop.Models.User();
+        user.Email = "david";
+        context.Users.Add(user);
+        user = new Webshop.Models.User();
+        user.Email = "help1";
+        user.UserType = Webshop.Models.UserType.Help;
+        context.Users.Add(user);
+        user = new Webshop.Models.User();
+        user.Email = "help2";
+        user.UserType = Webshop.Models.UserType.Help;
+        context.Users.Add(user);
+        user = new Webshop.Models.User();
+        user.Email = "help3";
+        user.UserType = Webshop.Models.UserType.Help;
+        context.Users.Add(user);
+        user = new Webshop.Models.User();
+        user.Email = "chrome";
+        context.Users.Add(user);
+        user = new Webshop.Models.User();
+        user.Email = "service";
+        user.UserType = Webshop.Models.UserType.Service;
+        context.Users.Add(user);
+        context.SaveChanges();
+        WebSecurity.CreateAccount("admin", "password");
+        WebSecurity.CreateAccount("david", "password");
+        WebSecurity.CreateAccount("help1", "password");
+        WebSecurity.CreateAccount("help2", "password");
+        WebSecurity.CreateAccount("help3", "password");
+        WebSecurity.CreateAccount("chrome", "password");
+        WebSecurity.CreateAccount("service", "password");
+    }
 }

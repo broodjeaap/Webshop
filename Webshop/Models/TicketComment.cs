@@ -19,8 +19,8 @@ namespace Webshop.Models
         public int TicketCommentID { get; set; }
         public string Text { get; set; }
         public int TicketID { get; set; }
-        public DateTime CommentPostTime { get; set; }
         public virtual Ticket Ticket { get; set; }
+        public DateTime CommentPostTime { get; set; }
         public int UserID { get; set; }
         public virtual User User { get; set; }
         
