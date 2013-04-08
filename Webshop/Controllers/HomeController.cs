@@ -65,6 +65,13 @@ namespace Webshop.Controllers
             ViewBag.subcat2 = product.SubCat2;
             ViewBag.perPage = perPage;
             ViewBag.currentPage = page;
+            bool isAdmin = false;
+            if (WebSecurity.IsAuthenticated)
+            {
+                var user = db.Users.Find(WebSecurity.CurrentUserId);
+                isAdmin = (user.UserType == UserType.Admin || user.UserType == UserType.Service);
+            }
+            ViewBag.isAdmin = isAdmin;
             return View(product);
         }
 

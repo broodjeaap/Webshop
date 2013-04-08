@@ -71,7 +71,36 @@ namespace Webshop.Controllers
                 db.Tickets.Find(ticketComment.TicketID).LastCommentDate = DateTime.Now;
                 db.SaveChanges();
             }
-            return View(db.Tickets.Find(ticketComment.TicketID));
+            return RedirectToAction("Ticket", new { id = ticketComment.TicketID } );
+        }
+
+        public ActionResult TicketStateChange(int id, string type)
+        {
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            if (user.UserType == UserType.Customer)
+            {
+                return RedirectToAction("Ticket", new { id = id } );
+            }
+            if (user.UserTicketLinks.Where(utl => utl.TicketID == id).Count() != 1 || user.UserType == UserType.Admin)
+            {
+                return RedirectToAction("Index", new { id = id });
+            }
+            var ticket = db.Tickets.Find(id);
+            ticket.TicketState = (TicketState)(Enum.Parse(typeof(TicketState), type));
+            db.Entry(ticket).State = System.Data.EntityState.Modified;
+            var te = new TicketEvent();
+            te.NewTicketState = ticket.TicketState;
+            te.text = "Ticket " + ticket.TicketID + " ( " + ticket.TicketTitle + " ) was changed to state " + ticket.TicketState + " by " + user.Email;
+            te.TicketID = id;
+            te.Ticket = ticket;
+            db.TicketEvents.Add(te);
+            if (user.UserType != UserType.Admin)
+            {
+                db.UserTicketLinks.Find(user.UserID, id).LastViewed = DateTime.Now;
+                ticket.LastCommentDate = DateTime.Now;
+            }
+            db.SaveChanges();
+            return RedirectToAction("Ticket", new { id = id });
         }
 
         public ActionResult EventHistory(int id)

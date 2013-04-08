@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Webshop.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+<h1>Admin Page</h1>
+<h2>Edit product</h2>
+<input type="number" value="" id="productid" name="productid" /> <a href="#" onclick="javascript:editProduct()">Edit</a>
+
+<h2>Manage Users</h2>
+<table>
+    <thead>
+        <tr>
+            <th>
+                ID#
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Tickets
+            </th>
+        </tr>
+    </thead>
+@foreach (var user in Model)
+{
+    <tr>
+        <td>
+            @user.UserID
+        </td>
+        <td>
+            @user.Email
+        </td>
+        <td>
+            @user.UserTicketLinks.Where(utl => utl.Ticket.TicketState == Webshop.Models.TicketState.Open).Count()
+        </td>
+        <td>
+            <select userid="@user.UserID" class="admin-user-manage">
+                @foreach (var cType in (Webshop.Models.UserType[])(Webshop.Models.UserType.Admin.GetType().GetEnumValues()))
+                {
+                    <option value="@cType.ToString()" @(cType == user.UserType ? "selected='selected'" : "")>@cType.ToString()</option>
+                }
+            </select>
+        </td>
+    </tr>
+}
+@using (Html.BeginForm())
+{
+    <tr>
+        <td>
+
+        </td>
+        <td>
+            <input type="text" name="Email" id="Email" />
+        </td>
+        <td>
+
+        </td>
+        <td>
+            <select name="type" id="type">
+            @foreach (var cType in (Webshop.Models.UserType[])(Webshop.Models.UserType.Admin.GetType().GetEnumValues()))
+                {
+                    <option value="@cType.ToString()" >@cType.ToString()</option>
+                }
+            </select>
+            <input type="submit" value="Create" />
+        </td>
+    </tr>
+}
+</table>
+<script type ="text/javascript">
+    function editProduct() {
+        var val = $("#productid").attr("value");
+        if ($.isNumeric(val)) {
+            window.location = "/Admin/Product/" + val;
+        }
+    }
+    $(".admin-user-manage").change(function (elem) {
+        var select = $(elem.target);
+        window.location = "/Admin/UserTypePost/?id=" + select.attr("userid") + "&type=" + select.val();
+    });
+</script>

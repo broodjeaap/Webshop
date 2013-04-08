@@ -13,6 +13,10 @@
             <div class="product-desc-div">
                 @Html.DisplayFor(model => model.TextDescription)
             </div>
+            @if ((bool)(ViewBag.isAdmin))
+            {
+                @Html.ActionLink("Edit this product", "Product", "Admin", new { id = @Model.ProductID }, new { } );
+            }
         </div>
         <div class="product-image-price-div">
             <table>

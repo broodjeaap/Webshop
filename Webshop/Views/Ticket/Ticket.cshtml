@@ -15,6 +15,14 @@
         On @lastTicketEvent.EventTime: @lastTicketEvent.text <br /> 
         @Html.ActionLink("View Complete History", "EventHistory", new { id = Model.TicketID } )
     </div>
+    <div class="last-ticket-event">
+        Change ticket State: <select ticketid="@Model.TicketID" id="changeStateSelect">
+                @foreach (var cType in (Webshop.Models.TicketState[])(Webshop.Models.TicketState.New.GetType().GetEnumValues()))
+                {
+                    <option value="@cType.ToString()" @(cType == Model.TicketState ? "selected='selected" : "")>@cType.ToString()</option>
+                }
+                             </select>
+    </div>
 <h3>
     Comments: 
 </h3>
@@ -47,3 +55,10 @@
         @Html.ActionLink("Back to Tickets", "Index", "Ticket")
     </p>
 </fieldset>
+
+<script type="text/javascript">
+    $("#changeStateSelect").change(function (elem) {
+        var select = $(elem.target);
+        window.location = "/Ticket/TicketStateChange/?id=" + select.attr("ticketid") + "&type=" + select.val();
+    });
+</script>

@@ -1,0 +1,29 @@
+﻿@model Webshop.Models.Product
+
+@{
+    ViewBag.Title = "Product";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Edit @Model.Name</legend>
+        @Html.HiddenFor(modelItem => modelItem.ProductID)
+        Name: <br />
+        @Html.TextBoxFor(modelItem => modelItem.Name, new { size = 50 })<br />
+        Description:<br />
+        @Html.TextAreaFor(modelItem => modelItem.TextDescription, new { rows = 15, cols = 80 })<br />
+        Image file name:<br />
+        @Html.TextBoxFor(modelItem => modelItem.ImageName, new { size = 50 })<br />
+        Price (in cents):<br />
+        @Html.TextBoxFor(modelItem => modelItem.Price, new { size = 20 })<br />
+        Category:<br />
+        @Html.TextBoxFor(modelItem => modelItem.Category, new { size = 30 })<br />
+        Subcat1<br />
+        @Html.TextBoxFor(modelItem => modelItem.SubCat1, new { size = 30 })<br />
+        Subcat2<br />
+        @Html.TextBoxFor(modelItem => modelItem.SubCat2, new { size = 30 })<br />
+        <input type="submit" value="Edit product" />
+    </fieldset>
+}
