@@ -13,6 +13,11 @@ namespace Webshop.Models
 {
     public class Product
     {
+        public Product()
+        {
+            Properties = new HashSet<ProductProperty>();
+        }
+
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ProductID { get; set; }

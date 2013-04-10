@@ -9,8 +9,14 @@ namespace Webshop.Controllers
 {
     public class SearchController : Controller
     {
-        private WebshopContext db = new WebshopContext();
-        private List<Product> empty = new List<Product>();
+        private readonly WebshopDAO db;
+
+        public SearchController(WebshopDAO db)
+        {
+            this.db = db;
+        }
+
+        private static List<Product> empty = new List<Product>();
 
         public ActionResult Index(string query = "", int page = 1, int perPage = 10)
         {
@@ -23,7 +29,7 @@ namespace Webshop.Controllers
             ViewBag.query = query;
             page = page - 1;
 
-            List<Product> filteredProducts = db.Products.ToList();
+            List<Product> filteredProducts = db.getProducts().ToList();
             var keywords = query.Split(' ');
             foreach (var keyword in keywords)
             {

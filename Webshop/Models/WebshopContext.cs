@@ -8,7 +8,7 @@ using WebMatrix.WebData;
 
 namespace Webshop.Models
 {
-    public class WebshopContext : DbContext, WebshopDAO
+    public class WebshopContext : WebshopDAO
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductProperty> ProductProperties { get; set; }
@@ -21,6 +21,51 @@ namespace Webshop.Models
         public DbSet<TicketComment> TicketComments { get; set; }
         public DbSet<TicketEvent> TicketEvents { get; set; }
         public DbSet<UserTicketLink> UserTicketLinks { get; set; }
+
+        public override DbSet<Product> getProducts()
+        {
+            return Products;
+        }
+        public override DbSet<ProductProperty> getProductProperties()
+        {
+            return ProductProperties;
+        }
+        public override DbSet<User> getUsers()
+        {
+            return Users;
+        }
+        public override DbSet<Address> getAddresses()
+        {
+            return Addresses;
+        }
+        public override DbSet<ShoppingCartItem> getShoppingCartItems()
+        {
+            return ShoppingCartItems;
+        }
+        public override DbSet<Order> getOrders()
+        {
+            return Orders;
+        }
+        public override DbSet<OrderItem> getOrderItems()
+        {
+            return OrderItems;
+        }
+        public override DbSet<Ticket> getTickets()
+        {
+            return Tickets;
+        }
+        public override DbSet<TicketComment> getTicketComments()
+        {
+            return TicketComments;
+        }
+        public override DbSet<TicketEvent> getTicketEvents()
+        {
+            return TicketEvents;
+        }
+        public override DbSet<UserTicketLink> getUserTicketLinks()
+        {
+            return UserTicketLinks;
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

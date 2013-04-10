@@ -18,9 +18,12 @@ namespace Webshop.Controllers
     public class AccountController : Controller
     {
 
-        private WebshopContext db = new WebshopContext();
-        //
-        // GET: /Account/Login
+        private readonly WebshopDAO db;
+
+        public AccountController(WebshopDAO db)
+        {
+            this.db = db;
+        }
 
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -85,7 +88,7 @@ namespace Webshop.Controllers
                     {
                         var user = new User();
                         user.Email = model.UserName;
-                        db.Users.Add(user);
+                        db.getUsers().Add(user);
                         db.SaveChanges();
                         WebSecurity.CreateAccount(model.UserName, model.Password);
                         WebSecurity.Login(model.UserName, model.Password);
@@ -112,7 +115,7 @@ namespace Webshop.Controllers
                 : "";
             ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             ViewBag.ReturnUrl = Url.Action("Manage");
-            return View(db.Users.Find(WebSecurity.CurrentUserId));
+            return View(db.getUsers().Find(WebSecurity.CurrentUserId));
         }
 
         //
@@ -185,7 +188,7 @@ namespace Webshop.Controllers
             address.UserID = WebSecurity.CurrentUserId;
             if (ModelState.IsValid)
             {
-                db.Users.Find(WebSecurity.CurrentUserId).Addresses.Add(address);
+                db.getUsers().Find(WebSecurity.CurrentUserId).Addresses.Add(address);
                 db.SaveChanges();
             }
             return RedirectToAction("Manage");
@@ -206,7 +209,7 @@ namespace Webshop.Controllers
 
         public ActionResult Order(int id)
         {
-            var order = db.Orders.Where(o => o.UserID == WebSecurity.CurrentUserId).Where(o => o.OrderID == id);
+            var order = db.getOrders().Where(o => o.UserID == WebSecurity.CurrentUserId).Where(o => o.OrderID == id);
             if (order.Count() == 1)
             {
                 return View(order.First());
