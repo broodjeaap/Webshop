@@ -8,7 +8,7 @@ using WebMatrix.WebData;
 
 namespace Webshop.Models
 {
-    public class WebshopContext : DbContext, WebshopDAO
+    public class WebshopContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductProperty> ProductProperties { get; set; }

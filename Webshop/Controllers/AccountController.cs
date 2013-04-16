@@ -19,6 +19,7 @@ namespace Webshop.Controllers
     {
 
         private WebshopContext db = new WebshopContext();
+        private IWebshopDAO dao = new WebshopDAO(db);
         //
         // GET: /Account/Login
 
@@ -112,7 +113,7 @@ namespace Webshop.Controllers
                 : "";
             ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             ViewBag.ReturnUrl = Url.Action("Manage");
-            return View(db.Users.Find(WebSecurity.CurrentUserId));
+            return View(dao.getCurrentUser());
         }
 
         //
@@ -206,10 +207,10 @@ namespace Webshop.Controllers
 
         public ActionResult Order(int id)
         {
-            var order = db.Orders.Where(o => o.UserID == WebSecurity.CurrentUserId).Where(o => o.OrderID == id);
-            if (order.Count() == 1)
+            var order = dao.getOrder(id);
+            if (order != null)
             {
-                return View(order.First());
+                return View(order);
             }
             return RedirectToAction("Manage");
         }

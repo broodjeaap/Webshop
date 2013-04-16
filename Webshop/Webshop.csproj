@@ -186,6 +186,7 @@
     <Compile Include="Models\UserTicketLink.cs" />
     <Compile Include="Models\UserType.cs" />
     <Compile Include="Models\WebshopContext.cs" />
+    <Compile Include="Models\IWebshopDAO.cs" />
     <Compile Include="Models\WebshopDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

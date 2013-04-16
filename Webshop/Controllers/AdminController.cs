@@ -13,11 +13,11 @@ namespace Webshop.Controllers
     public class AdminController : Controller
     {
         WebshopContext db = new WebshopContext();
+        IWebshopDAO dao = new WebshopDAO();
 
         public ActionResult Index()
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user.UserType == UserType.Customer)
+            if (!dao.getCurrentUserIsAdmin())
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -27,12 +27,11 @@ namespace Webshop.Controllers
         [HttpPost]
         public ActionResult Index(string Email, string type)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user.UserType == UserType.Customer)
+            if (!dao.getCurrentUserIsAdmin())
             {
                 return RedirectToAction("Index", "Home");
             }
-            user = new User();
+            var user = new User();
             user.Email = Email;
             user.UserType = (UserType)Enum.Parse(typeof(UserType), type);
             db.Users.Add(user);
@@ -43,8 +42,7 @@ namespace Webshop.Controllers
 
         public ActionResult Product(int id)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user.UserType == UserType.Customer)
+            if (!dao.getCurrentUserIsAdmin())
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -55,8 +53,7 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Product(Product product)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user.UserType == UserType.Customer)
+            if (!dao.getCurrentUserIsAdmin())
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -70,12 +67,11 @@ namespace Webshop.Controllers
 
         public ActionResult UserTypePost(int id, string type)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
-            if (user.UserType == UserType.Customer)
+            if (!dao.getCurrentUserIsAdmin())
             {
                 return RedirectToAction("Index", "Home");
             }
-            user = db.Users.Find(id);
+            var user = dao.getUser(id);
             var enumType = (UserType)Enum.Parse(typeof(UserType), type);
             user.UserType = enumType;
             db.Entry(user).State = EntityState.Modified;

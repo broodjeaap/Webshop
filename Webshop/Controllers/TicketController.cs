@@ -12,35 +12,36 @@ namespace Webshop.Controllers
     public class TicketController : Controller
     {
         private WebshopContext db = new WebshopContext();
+        private IWebshopDAO dao = new WebshopDAO();
 
         public ActionResult Index()
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            var user = dao.getCurrentUser();
             switch (user.UserType)
             {
                 case UserType.Admin:
                     {
-                        return View("AdminIndex", db.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
+                        return View("AdminIndex", dao.getAllTicketsOrderedByDate());
                     }
                 case UserType.Customer:
                     {
-                        return View(user.UserTicketLinks.OrderBy(utl => utl.Ticket.TicketCreationDate).ToList());
+                        return View(dao.getUserTicketsOrderedByDate());
                     }
                 case UserType.Help:
                     {
-                        return View("HelpIndex", user.UserTicketLinks.OrderBy(utl => utl.Ticket.TicketCreationDate).ToList());
+                        return View("HelpIndex", dao.getUserTicketsOrderedByDate());
                     }
                 default:
                     {
-                        return View("ServiceIndex", db.Tickets.Where(t => t.TicketState == TicketState.New).OrderBy(t => t.TicketCreationDate).ToList());
+                        return View("ServiceIndex", dao.getNewTicketsOrderedByDate());
                     }
             }            
         }
 
         public ActionResult Ticket(int id)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
-            var ticket = db.Tickets.Find(id);
+            var user = dao.getCurrentUser();
+            var ticket = dao.getTicket(id);
             if (user.UserTicketLinks.Where(utl => utl.TicketID == ticket.TicketID && utl.UserID == user.UserID).Count() == 0 && user.UserType != UserType.Admin)
             {
                 return RedirectToAction("Index");
@@ -57,7 +58,7 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Ticket(TicketComment ticketComment)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            var user = dao.getCurrentUser();
             ticketComment.UserID = user.UserID;
             if (ticketComment.Text != null && !ticketComment.Text.Trim().Equals("") && (db.UserTicketLinks.Find(user.UserID, ticketComment.TicketID) != null || user.UserType != UserType.Customer))
             {
@@ -76,7 +77,7 @@ namespace Webshop.Controllers
 
         public ActionResult TicketStateChange(int id, string type)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            var user = dao.getCurrentUser();
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Ticket", new { id = id } );
@@ -85,7 +86,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", new { id = id });
             }
-            var ticket = db.Tickets.Find(id);
+            var ticket = dao.getTicket(id);
             ticket.TicketState = (TicketState)(Enum.Parse(typeof(TicketState), type));
             db.Entry(ticket).State = System.Data.EntityState.Modified;
             var te = new TicketEvent();
@@ -105,26 +106,26 @@ namespace Webshop.Controllers
 
         public ActionResult EventHistory(int id)
         {
-            return View(db.Tickets.Find(id));
+            return View(dao.getTicket(id));
         }
 
         public ActionResult Assign(int id)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            var user = dao.getUser(id);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index");
             }
-            var Ticket = db.Tickets.Find(id);
+            var Ticket = dao.getTicket(id);
             ViewBag.Ticket = Ticket;
-            return View(db.Users.Where(u => u.UserType == UserType.Help && u.UserID != user.UserID));
+            return View(dao.getHelpUsers());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Assign(int TicketID, int UserID)
         {
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            var user = dao.getCurrentUser();
             if (user.UserID == UserID)
             {
                 return RedirectToAction("Index");
@@ -133,12 +134,12 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var assignedToUser = db.Users.Find(UserID);
+            var assignedToUser = dao.getUser(UserID);
             if (assignedToUser.UserType != UserType.Help)
             {
                 return RedirectToAction("Index");
             }
-            var ticket = db.Tickets.Find(TicketID);
+            var ticket = dao.getTicket(TicketID);
             if (!assignedToUser.UserTicketLinks.Select(utl => utl.Ticket).Contains(ticket))
             {
                 var userTicketLink = new UserTicketLink();

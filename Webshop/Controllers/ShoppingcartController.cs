@@ -15,18 +15,19 @@ namespace Webshop.Controllers
     {
 
         private WebshopContext db = new WebshopContext();
+        private IWebshopDAO dao = new WebshopDAO();
 
         //
         // GET: /Shoppingcart/
 
         public ActionResult Index()
         {
-            return View(db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems);
+            return View(dao.getCurrentUsersShoppingCartItems());
         }
 
         public ActionResult Update(int id, int quantity, bool ajax = false)
         {
-            var product = db.Products.Find(id);
+            var product = dao.getProduct(id);
             if (product == null)
             {
                 if (ajax)
@@ -39,7 +40,7 @@ namespace Webshop.Controllers
                 }
             }
 
-            var productsInShoppingCart = db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems;
+            var productsInShoppingCart = dao.getCurrentUsersShoppingCartItems();
             var productInShoppingCart = productsInShoppingCart.Where(p => p.ProductID == product.ProductID);
             if (productInShoppingCart.Count() == 1)
             {
@@ -50,7 +51,7 @@ namespace Webshop.Controllers
                 var item = new ShoppingCartItem();
                 item.ProductID = product.ProductID;
                 item.Product = product;
-                item.UserID = WebSecurity.CurrentUserId;
+                item.UserID = dao.getCurrentUserId();
                 item.Quantity = quantity;
                 productsInShoppingCart.Add(item);
             }
@@ -68,7 +69,7 @@ namespace Webshop.Controllers
 
         public ActionResult Add(int id, int quantity = 1, bool ajax = false)
         {
-            var product = db.Products.Find(id);
+            var product = dao.getProduct(id);
             if (product == null)
             {
                 if (ajax)
@@ -80,7 +81,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            var productsInShoppingCart = db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems;
+            var productsInShoppingCart = dao.getCurrentUsersShoppingCartItems();
             var productInShoppingCart = productsInShoppingCart.Where(p => p.ProductID == product.ProductID);
             if (productInShoppingCart.Count() == 1)
             {
@@ -108,7 +109,7 @@ namespace Webshop.Controllers
 
         public ActionResult Delete(int id, int quantity = 1, bool ajax = false)
         {
-            var product = db.Products.Find(id);
+            var product = dao.getProduct(id);
             if (product == null)
             {
                 if (ajax)
@@ -120,7 +121,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            var productsInShoppingCart = db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems;
+            var productsInShoppingCart = dao.getCurrentUsersShoppingCartItems();
             var productInShoppingCart = productsInShoppingCart.Where(p => p.ProductID == product.ProductID);
             if (productInShoppingCart.Count() == 1)
             {
@@ -155,18 +156,18 @@ namespace Webshop.Controllers
 
         public ActionResult PickAddressOrder()
         {
-            return View(db.Users.Find(WebSecurity.CurrentUserId).Addresses);
+            return View(dao.getCurrentUser().Addresses);
         }
 
         public ActionResult OrderItemsToAddress(int id)
         {
-            var result = db.Addresses.Where(a => a.UserID == WebSecurity.CurrentUserId).Where(a => a.AddressID == id);
+            var result = dao.getCurrentUser().Addresses.Where(a => a.AddressID == id);
             if (result.Count() == 1)
             {
-                var user = db.Users.Find(WebSecurity.CurrentUserId);
+                var user = dao.getCurrentUser();
                 var order = new Order();
                 order.User = user;
-                order.UserID = WebSecurity.CurrentUserId;
+                order.UserID = user.UserID;
                 order.AddressID = id;
                 order.OrderTime = DateTime.Now;
                 foreach (var i in user.ShoppingCartItems)
