@@ -14,12 +14,7 @@ namespace Webshop.Controllers
     public class HomeController : Controller
     {
 
-        private readonly WebshopDAO db;
-
-        public HomeController(WebshopDAO db)
-        {
-            this.db = db;
-        }
+        private WebshopContext db = new WebshopContext();
 
         public ActionResult Index(string category = "", string subcat1 = "", string subcat2 = "", int page = 1, int perPage = 10)
         {
@@ -32,7 +27,7 @@ namespace Webshop.Controllers
 
 
 
-            List<Product> filteredProducts = db.getProducts().ToList();
+            List<Product> filteredProducts = db.Products.ToList();
             if (!category.Equals(""))
             {
                 filteredProducts = filteredProducts.Where(p => p.Category.Equals(category)).ToList();
@@ -64,7 +59,7 @@ namespace Webshop.Controllers
 
         public ActionResult Product(int id, int page = 1, int perPage = 10)
         {
-            var product = db.getProducts().Find(id);
+            var product = db.Products.Find(id);
             ViewBag.category = product.Category;
             ViewBag.subcat1 = product.SubCat1;
             ViewBag.subcat2 = product.SubCat2;
@@ -73,7 +68,7 @@ namespace Webshop.Controllers
             bool isAdmin = false;
             if (WebSecurity.IsAuthenticated)
             {
-                var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+                var user = db.Users.Find(WebSecurity.CurrentUserId);
                 isAdmin = (user.UserType == UserType.Admin || user.UserType == UserType.Service);
             }
             ViewBag.isAdmin = isAdmin;
@@ -91,26 +86,26 @@ namespace Webshop.Controllers
         {
             ViewBag.Message = "Ticket send.";
             t.OwnerUserID = WebSecurity.CurrentUserId;
-            db.getTickets().Add(t);
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            db.Tickets.Add(t);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
 
             var userTicketLink = new UserTicketLink();
             userTicketLink.UserID = user.UserID;
             userTicketLink.User = user;
             userTicketLink.TicketID = t.TicketID;
             userTicketLink.Ticket = t;
-            db.getUserTicketLinks().Add(userTicketLink);
+            db.UserTicketLinks.Add(userTicketLink);
 
             var ticketEvent = new TicketEvent();
             ticketEvent.text = "Ticket created";
-            db.getTicketEvents().Add(ticketEvent);
+            db.TicketEvents.Add(ticketEvent);
             db.SaveChanges();
             return View();
         }
 
         public ActionResult SideBar(string category = "", string subcat1 = "", string subcat2 = "")
         {
-            var categories = db.getProducts().Select(p => p.Category).Distinct().ToList();
+            var categories = db.Products.Select(p => p.Category).Distinct().ToList();
             StringBuilder sb = new StringBuilder("<table id=\"category_table\">",categories.Count * 10);
             foreach (var c in categories)
             {
@@ -125,7 +120,7 @@ namespace Webshop.Controllers
                 sb.Append("</tr>");
                 if (c.Equals(category))
                 {
-                    var subCategories1Products = db.getProducts().Where(p => p.Category.Equals(category));
+                    var subCategories1Products = db.Products.Where(p => p.Category.Equals(category));
                     var subCategories1 = subCategories1Products.Select(p => p.SubCat1).Distinct().ToList();
                     foreach (var sc1 in subCategories1)
                     {
@@ -146,7 +141,7 @@ namespace Webshop.Controllers
                             var subCategories2 = subCategories2Products.Select(p => p.SubCat2).Distinct().ToList();
                             foreach (var sc2 in subCategories2)
                             {
-                                if("".Equals(sc2)){ //blegh
+                                if(sc2.Equals("")){ //blegh
                                     continue;
                                 }
                                 sb.Append("<tr>");

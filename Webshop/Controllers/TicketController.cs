@@ -11,21 +11,16 @@ namespace Webshop.Controllers
     [Authorize]
     public class TicketController : Controller
     {
-        private readonly WebshopDAO db;
-
-        public TicketController(WebshopDAO db)
-        {
-            this.db = db;
-        }
+        private WebshopContext db = new WebshopContext();
 
         public ActionResult Index()
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             switch (user.UserType)
             {
                 case UserType.Admin:
                     {
-                        return View("AdminIndex", db.getTickets().OrderBy(t => t.TicketCreationDate).ToList());
+                        return View("AdminIndex", db.Tickets.OrderBy(t => t.TicketCreationDate).ToList());
                     }
                 case UserType.Customer:
                     {
@@ -37,22 +32,22 @@ namespace Webshop.Controllers
                     }
                 default:
                     {
-                        return View("ServiceIndex", db.getTickets().Where(t => t.TicketState == TicketState.New).OrderBy(t => t.TicketCreationDate).ToList());
+                        return View("ServiceIndex", db.Tickets.Where(t => t.TicketState == TicketState.New).OrderBy(t => t.TicketCreationDate).ToList());
                     }
             }            
         }
 
         public ActionResult Ticket(int id)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
-            var ticket = db.getTickets().Find(id);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
+            var ticket = db.Tickets.Find(id);
             if (user.UserTicketLinks.Where(utl => utl.TicketID == ticket.TicketID && utl.UserID == user.UserID).Count() == 0 && user.UserType != UserType.Admin)
             {
                 return RedirectToAction("Index");
             }
             if (user.UserType != UserType.Admin)
             {
-                db.getUserTicketLinks().Find(user.UserID, ticket.TicketID).LastViewed = DateTime.Now;
+                db.UserTicketLinks.Find(user.UserID, ticket.TicketID).LastViewed = DateTime.Now;
                 db.SaveChanges();
             }
             return View(ticket);
@@ -62,18 +57,18 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Ticket(TicketComment ticketComment)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             ticketComment.UserID = user.UserID;
-            if (ticketComment.Text != null && !ticketComment.Text.Trim().Equals("") && (db.getUserTicketLinks().Find(user.UserID, ticketComment.TicketID) != null || user.UserType != UserType.Customer))
+            if (ticketComment.Text != null && !ticketComment.Text.Trim().Equals("") && (db.UserTicketLinks.Find(user.UserID, ticketComment.TicketID) != null || user.UserType != UserType.Customer))
             {
                 ticketComment.User = user;
-                db.getTicketComments().Add(ticketComment);
+                db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
             }
             if (user.UserType != UserType.Admin)
             {
-                db.getUserTicketLinks().Find(user.UserID, ticketComment.TicketID).LastViewed = DateTime.Now;
-                db.getTickets().Find(ticketComment.TicketID).LastCommentDate = DateTime.Now;
+                db.UserTicketLinks.Find(user.UserID, ticketComment.TicketID).LastViewed = DateTime.Now;
+                db.Tickets.Find(ticketComment.TicketID).LastCommentDate = DateTime.Now;
                 db.SaveChanges();
             }
             return RedirectToAction("Ticket", new { id = ticketComment.TicketID } );
@@ -81,7 +76,7 @@ namespace Webshop.Controllers
 
         public ActionResult TicketStateChange(int id, string type)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Ticket", new { id = id } );
@@ -90,7 +85,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", new { id = id });
             }
-            var ticket = db.getTickets().Find(id);
+            var ticket = db.Tickets.Find(id);
             ticket.TicketState = (TicketState)(Enum.Parse(typeof(TicketState), type));
             db.Entry(ticket).State = System.Data.EntityState.Modified;
             var te = new TicketEvent();
@@ -98,10 +93,10 @@ namespace Webshop.Controllers
             te.text = "Ticket " + ticket.TicketID + " ( " + ticket.TicketTitle + " ) was changed to state " + ticket.TicketState + " by " + user.Email;
             te.TicketID = id;
             te.Ticket = ticket;
-            db.getTicketEvents().Add(te);
+            db.TicketEvents.Add(te);
             if (user.UserType != UserType.Admin)
             {
-                db.getUserTicketLinks().Find(user.UserID, id).LastViewed = DateTime.Now;
+                db.UserTicketLinks.Find(user.UserID, id).LastViewed = DateTime.Now;
                 ticket.LastCommentDate = DateTime.Now;
             }
             db.SaveChanges();
@@ -110,26 +105,26 @@ namespace Webshop.Controllers
 
         public ActionResult EventHistory(int id)
         {
-            return View(db.getTickets().Find(id));
+            return View(db.Tickets.Find(id));
         }
 
         public ActionResult Assign(int id)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index");
             }
-            var Ticket = db.getTickets().Find(id);
+            var Ticket = db.Tickets.Find(id);
             ViewBag.Ticket = Ticket;
-            return View(db.getUsers().Where(u => u.UserType == UserType.Help && u.UserID != user.UserID));
+            return View(db.Users.Where(u => u.UserType == UserType.Help && u.UserID != user.UserID));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Assign(int TicketID, int UserID)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserID == UserID)
             {
                 return RedirectToAction("Index");
@@ -138,12 +133,12 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var assignedToUser = db.getUsers().Find(UserID);
+            var assignedToUser = db.Users.Find(UserID);
             if (assignedToUser.UserType != UserType.Help)
             {
                 return RedirectToAction("Index");
             }
-            var ticket = db.getTickets().Find(TicketID);
+            var ticket = db.Tickets.Find(TicketID);
             if (!assignedToUser.UserTicketLinks.Select(utl => utl.Ticket).Contains(ticket))
             {
                 var userTicketLink = new UserTicketLink();
@@ -151,7 +146,7 @@ namespace Webshop.Controllers
                 userTicketLink.User = assignedToUser;
                 userTicketLink.TicketID = ticket.TicketID;
                 userTicketLink.Ticket = ticket;
-                db.getUserTicketLinks().Add(userTicketLink);
+                db.UserTicketLinks.Add(userTicketLink);
                 ticket.TicketState = TicketState.Open;
 
                 var ticketEvent = new TicketEvent();
@@ -159,7 +154,7 @@ namespace Webshop.Controllers
                 ticketEvent.text = "Ticket " + ticket.TicketID + " ( " + ticket.TicketTitle + " ) assigned to " + assignedToUser.Email + " by " + user.Email;
                 ticketEvent.TicketID = ticket.TicketID;
                 ticketEvent.Ticket = ticket;
-                db.getTicketEvents().Add(ticketEvent);
+                db.TicketEvents.Add(ticketEvent);
                 db.SaveChanges();
             }
             return RedirectToAction("Index");

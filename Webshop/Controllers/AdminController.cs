@@ -12,27 +12,22 @@ namespace Webshop.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        private readonly WebshopDAO db;
-
-        public AdminController(WebshopDAO db)
-        {
-            this.db = db;
-        }
+        WebshopContext db = new WebshopContext();
 
         public ActionResult Index()
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(db.getUsers().Where(u => u.UserType != UserType.Customer).ToList());
+            return View(db.Users.Where(u => u.UserType != UserType.Customer).ToList());
         }
 
         [HttpPost]
         public ActionResult Index(string Email, string type)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index", "Home");
@@ -40,7 +35,7 @@ namespace Webshop.Controllers
             user = new User();
             user.Email = Email;
             user.UserType = (UserType)Enum.Parse(typeof(UserType), type);
-            db.getUsers().Add(user);
+            db.Users.Add(user);
             db.SaveChanges();
             WebSecurity.CreateAccount(Email, "password");
             return RedirectToAction("Index");
@@ -48,19 +43,19 @@ namespace Webshop.Controllers
 
         public ActionResult Product(int id)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(db.getProducts().Find(id));
+            return View(db.Products.Find(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Product(Product product)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index", "Home");
@@ -75,12 +70,12 @@ namespace Webshop.Controllers
 
         public ActionResult UserTypePost(int id, string type)
         {
-            var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+            var user = db.Users.Find(WebSecurity.CurrentUserId);
             if (user.UserType == UserType.Customer)
             {
                 return RedirectToAction("Index", "Home");
             }
-            user = db.getUsers().Find(id);
+            user = db.Users.Find(id);
             var enumType = (UserType)Enum.Parse(typeof(UserType), type);
             user.UserType = enumType;
             db.Entry(user).State = EntityState.Modified;

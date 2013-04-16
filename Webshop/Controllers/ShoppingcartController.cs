@@ -14,21 +14,19 @@ namespace Webshop.Controllers
     public class ShoppingcartController : Controller
     {
 
-        private readonly WebshopDAO db;
+        private WebshopContext db = new WebshopContext();
 
-        public ShoppingcartController(WebshopDAO db)
-        {
-            this.db = db;
-        }
+        //
+        // GET: /Shoppingcart/
 
         public ActionResult Index()
         {
-            return View(db.getUsers().Find(WebSecurity.CurrentUserId).ShoppingCartItems);
+            return View(db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems);
         }
 
         public ActionResult Update(int id, int quantity, bool ajax = false)
         {
-            var product = db.getProducts().Find(id);
+            var product = db.Products.Find(id);
             if (product == null)
             {
                 if (ajax)
@@ -41,7 +39,7 @@ namespace Webshop.Controllers
                 }
             }
 
-            var productsInShoppingCart = db.getUsers().Find(WebSecurity.CurrentUserId).ShoppingCartItems;
+            var productsInShoppingCart = db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems;
             var productInShoppingCart = productsInShoppingCart.Where(p => p.ProductID == product.ProductID);
             if (productInShoppingCart.Count() == 1)
             {
@@ -70,7 +68,7 @@ namespace Webshop.Controllers
 
         public ActionResult Add(int id, int quantity = 1, bool ajax = false)
         {
-            var product = db.getProducts().Find(id);
+            var product = db.Products.Find(id);
             if (product == null)
             {
                 if (ajax)
@@ -82,7 +80,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            var productsInShoppingCart = db.getUsers().Find(WebSecurity.CurrentUserId).ShoppingCartItems;
+            var productsInShoppingCart = db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems;
             var productInShoppingCart = productsInShoppingCart.Where(p => p.ProductID == product.ProductID);
             if (productInShoppingCart.Count() == 1)
             {
@@ -110,7 +108,7 @@ namespace Webshop.Controllers
 
         public ActionResult Delete(int id, int quantity = 1, bool ajax = false)
         {
-            var product = db.getProducts().Find(id);
+            var product = db.Products.Find(id);
             if (product == null)
             {
                 if (ajax)
@@ -122,7 +120,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            var productsInShoppingCart = db.getUsers().Find(WebSecurity.CurrentUserId).ShoppingCartItems;
+            var productsInShoppingCart = db.Users.Find(WebSecurity.CurrentUserId).ShoppingCartItems;
             var productInShoppingCart = productsInShoppingCart.Where(p => p.ProductID == product.ProductID);
             if (productInShoppingCart.Count() == 1)
             {
@@ -130,7 +128,7 @@ namespace Webshop.Controllers
                 scp.Quantity -= quantity;
                 if (scp.Quantity <= 0)
                 {
-                    db.getShoppingCartItems().Remove(scp);
+                    db.ShoppingCartItems.Remove(scp);
                 }
             }
             else
@@ -157,15 +155,15 @@ namespace Webshop.Controllers
 
         public ActionResult PickAddressOrder()
         {
-            return View(db.getUsers().Find(WebSecurity.CurrentUserId).Addresses);
+            return View(db.Users.Find(WebSecurity.CurrentUserId).Addresses);
         }
 
         public ActionResult OrderItemsToAddress(int id)
         {
-            var result = db.getAddresses().Where(a => a.UserID == WebSecurity.CurrentUserId).Where(a => a.AddressID == id);
+            var result = db.Addresses.Where(a => a.UserID == WebSecurity.CurrentUserId).Where(a => a.AddressID == id);
             if (result.Count() == 1)
             {
-                var user = db.getUsers().Find(WebSecurity.CurrentUserId);
+                var user = db.Users.Find(WebSecurity.CurrentUserId);
                 var order = new Order();
                 order.User = user;
                 order.UserID = WebSecurity.CurrentUserId;
@@ -184,9 +182,9 @@ namespace Webshop.Controllers
                 var items = user.ShoppingCartItems.ToList();
                 for (var a = items.Count() - 1; a >= 0; --a)
                 {
-                    db.getShoppingCartItems().Remove(items[a]);
+                    db.ShoppingCartItems.Remove(items[a]);
                 }
-                db.getOrders().Add(order);
+                db.Orders.Add(order);
                 db.SaveChanges();
                 return View();
             }
