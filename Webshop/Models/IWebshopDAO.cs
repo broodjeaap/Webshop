@@ -24,6 +24,9 @@ namespace Webshop.Models
         List<Ticket> getNewTicketsOrderedByDate();
         Ticket getTicket(int id);
         List<User> getHelpUsers();
+        List<User> getNonCustomerUsers();
+
+
     }
     /*
      * + * queries verhuizen naar DAO layer

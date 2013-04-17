@@ -9,7 +9,6 @@ namespace Webshop.Controllers
 {
     public class SearchController : Controller
     {
-        private WebshopContext db = new WebshopContext();
         private IWebshopDAO dao = new WebshopDAO();
         private List<Product> empty = new List<Product>();
 

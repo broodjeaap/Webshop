@@ -17,9 +17,8 @@ namespace Webshop.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
-
-        private WebshopContext db = new WebshopContext();
-        private IWebshopDAO dao = new WebshopDAO(db);
+        private IWebshopDAO dao = new WebshopDAO();
+        private IWebshopDSO dso = new WebshopDSO();
         //
         // GET: /Account/Login
 
@@ -82,17 +81,10 @@ namespace Webshop.Controllers
                 // Attempt to register the user
                 try
                 {
-                    if (!WebSecurity.UserExists(model.UserName))
+                    if (dso.createUser(model.UserName, model.Password))
                     {
-                        var user = new User();
-                        user.Email = model.UserName;
-                        db.Users.Add(user);
-                        db.SaveChanges();
-                        WebSecurity.CreateAccount(model.UserName, model.Password);
-                        WebSecurity.Login(model.UserName, model.Password);
                         return RedirectToAction("Index", "Home");
                     }
-                    
                 }
                 catch (MembershipCreateUserException e)
                 {
@@ -183,12 +175,7 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddAddress(Address address)
         {
-            address.UserID = WebSecurity.CurrentUserId;
-            if (ModelState.IsValid)
-            {
-                db.Users.Find(WebSecurity.CurrentUserId).Addresses.Add(address);
-                db.SaveChanges();
-            }
+            dso.addAddressToCurrentUser(address);
             return RedirectToAction("Manage");
         }
 
@@ -196,12 +183,7 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditAddress(Address address)
         {
-            address.UserID = WebSecurity.CurrentUserId;
-            if (ModelState.IsValid)
-            {
-                db.Entry(address).State = System.Data.EntityState.Modified;
-                db.SaveChanges();
-            }
+            dso.changeAddress(address);
             return RedirectToAction("Manage");
         }
 

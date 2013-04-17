@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\IWebshopDSO.cs" />
     <Compile Include="Models\TicketState.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Models\WebshopContext.cs" />
     <Compile Include="Models\IWebshopDAO.cs" />
     <Compile Include="Models\WebshopDAO.cs" />
+    <Compile Include="Models\WebshopDSO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -55,7 +55,7 @@
                     string js = "javascript:document.getElementById('updateQuantityForm" + @item.ProductID +"').submit()";
                 }
                 <a href="@js">Update</a>
-                @Html.ActionLink("Delete", "Delete", new { id=item.ShoppingCartItemID, quantity = @item.Quantity}) | 
+                @Html.ActionLink("Delete", "Delete", new { id=item.ProductID, quantity = @item.Quantity}) | 
                 @Html.ActionLink("Details", "Product", "Home", new { id = item.ProductID }, new { })
             </td>
         </tr>

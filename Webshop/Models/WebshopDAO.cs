@@ -11,6 +11,11 @@ namespace Webshop.Models
 
         private WebshopContext db;
 
+        public WebshopDAO()
+        {
+            db = new WebshopContext();
+        }
+
         public WebshopDAO(WebshopContext db)
         {
             this.db = db;
@@ -116,6 +121,11 @@ namespace Webshop.Models
         public List<User> getHelpUsers()
         {
             return db.Users.Where(u => u.UserType == UserType.Help && u.UserID != WebSecurity.CurrentUserId).ToList();
+        }
+
+        public List<User> getNonCustomerUsers()
+        {
+            return db.Users.Where(u => u.UserType != UserType.Customer).ToList();
         }
     }
 }

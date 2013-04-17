@@ -12,8 +12,8 @@ namespace Webshop.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        WebshopContext db = new WebshopContext();
-        IWebshopDAO dao = new WebshopDAO();
+        private IWebshopDAO dao = new WebshopDAO();
+        private IWebshopDSO dso = new WebshopDSO();
 
         public ActionResult Index()
         {
@@ -21,7 +21,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(db.Users.Where(u => u.UserType != UserType.Customer).ToList());
+            return View(dao.getNonCustomerUsers());
         }
 
         [HttpPost]
@@ -31,12 +31,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            var user = new User();
-            user.Email = Email;
-            user.UserType = (UserType)Enum.Parse(typeof(UserType), type);
-            db.Users.Add(user);
-            db.SaveChanges();
-            WebSecurity.CreateAccount(Email, "password");
+            dso.adminCreateUser(Email, "password", type);
             return RedirectToAction("Index");
         }
 
@@ -46,7 +41,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(db.Products.Find(id));
+            return View(dao.getProduct(id));
         }
 
         [HttpPost]
@@ -57,11 +52,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            if (ModelState.IsValid)
-            {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
-            }
+            dso.editProduct(product);
             return RedirectToAction("Product");
         }
 
@@ -71,11 +62,7 @@ namespace Webshop.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            var user = dao.getUser(id);
-            var enumType = (UserType)Enum.Parse(typeof(UserType), type);
-            user.UserType = enumType;
-            db.Entry(user).State = EntityState.Modified;
-            db.SaveChanges();
+            dso.changeUserType(id, type);
             return RedirectToAction("Index");
         }
     }

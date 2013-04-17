@@ -13,9 +13,8 @@ namespace Webshop.Controllers
 {
     public class HomeController : Controller
     {
-
-        private WebshopContext db = new WebshopContext();
         private IWebshopDAO dao = new WebshopDAO();
+        private IWebshopDSO dso = new WebshopDSO();
 
         public ActionResult Index(string category = "", string subcat1 = "", string subcat2 = "", int page = 1, int perPage = 10)
         {
@@ -67,27 +66,13 @@ namespace Webshop.Controllers
         public ActionResult Contact(Ticket t)
         {
             ViewBag.Message = "Ticket send.";
-            t.OwnerUserID = WebSecurity.CurrentUserId;
-            db.Tickets.Add(t);
-            var user = db.Users.Find(WebSecurity.CurrentUserId);
-
-            var userTicketLink = new UserTicketLink();
-            userTicketLink.UserID = user.UserID;
-            userTicketLink.User = user;
-            userTicketLink.TicketID = t.TicketID;
-            userTicketLink.Ticket = t;
-            db.UserTicketLinks.Add(userTicketLink);
-
-            var ticketEvent = new TicketEvent();
-            ticketEvent.text = "Ticket created";
-            db.TicketEvents.Add(ticketEvent);
-            db.SaveChanges();
+            dso.createTicket(t);
             return View();
         }
 
         public ActionResult SideBar(string category = "", string subcat1 = "", string subcat2 = "")
         {
-            var categories = db.Products.Select(p => p.Category).Distinct().ToList();
+            var categories = dso.getDistinctCategories();
             StringBuilder sb = new StringBuilder("<table id=\"category_table\">",categories.Count * 10);
             foreach (var c in categories)
             {
@@ -102,8 +87,7 @@ namespace Webshop.Controllers
                 sb.Append("</tr>");
                 if (c.Equals(category))
                 {
-                    var subCategories1Products = db.Products.Where(p => p.Category.Equals(category));
-                    var subCategories1 = subCategories1Products.Select(p => p.SubCat1).Distinct().ToList();
+                    var subCategories1 = dso.getDistinctSubCat1(category);
                     foreach (var sc1 in subCategories1)
                     {
                         sb.Append("<tr>");
@@ -119,11 +103,10 @@ namespace Webshop.Controllers
                         sb.Append("</tr>");
                         if (sc1.Equals(subcat1))
                         {
-                            var subCategories2Products = subCategories1Products.Where(p => p.SubCat1.Equals(sc1));
-                            var subCategories2 = subCategories2Products.Select(p => p.SubCat2).Distinct().ToList();
+                            var subCategories2 = dso.getDistinctSubCat2(category, sc1);
                             foreach (var sc2 in subCategories2)
                             {
-                                if(sc2.Equals("")){ //blegh
+                                if(sc2 == null){ //blegh
                                     continue;
                                 }
                                 sb.Append("<tr>");
