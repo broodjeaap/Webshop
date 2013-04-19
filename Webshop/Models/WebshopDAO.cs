@@ -11,11 +11,6 @@ namespace Webshop.Models
 
         private WebshopContext db;
 
-        public WebshopDAO()
-        {
-            db = new WebshopContext();
-        }
-
         public WebshopDAO(WebshopContext db)
         {
             this.db = db;

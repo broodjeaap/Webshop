@@ -13,8 +13,15 @@ namespace Webshop.Controllers
 {
     public class HomeController : Controller
     {
-        private IWebshopDAO dao = new WebshopDAO();
-        private IWebshopDSO dso = new WebshopDSO();
+        private IWebshopDAO dao;
+        private IWebshopDSO dso;
+
+        public HomeController(IWebshopDAO dao, IWebshopDSO dso)
+        {
+            this.dao = dao;
+            this.dso = dso;
+        }
+
 
         public ActionResult Index(string category = "", string subcat1 = "", string subcat2 = "", int page = 1, int perPage = 10)
         {

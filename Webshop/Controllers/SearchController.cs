@@ -9,7 +9,12 @@ namespace Webshop.Controllers
 {
     public class SearchController : Controller
     {
-        private IWebshopDAO dao = new WebshopDAO();
+        private IWebshopDAO dao;
+
+        public SearchController(IWebshopDAO dao)
+        {
+            this.dao = dao;
+        }
         private List<Product> empty = new List<Product>();
 
         public ActionResult Index(string query = "", int page = 1, int perPage = 10)

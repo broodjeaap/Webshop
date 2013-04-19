@@ -17,10 +17,15 @@ namespace Webshop.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
-        private IWebshopDAO dao = new WebshopDAO();
-        private IWebshopDSO dso = new WebshopDSO();
-        //
-        // GET: /Account/Login
+        private IWebshopDAO dao;
+        private IWebshopDSO dso;
+
+
+        public AccountController(IWebshopDAO dao, IWebshopDSO dso)
+        {
+            this.dao = dao;
+            this.dso = dso;
+        }
 
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)

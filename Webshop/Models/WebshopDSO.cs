@@ -11,6 +11,11 @@ namespace Webshop.Models
     {
         private WebshopContext db = new WebshopContext();
 
+        public WebshopDSO(WebshopContext db)
+        {
+            this.db = db;
+        }
+
         public bool createUser(string email, string password)
         {
             return createUser(email, password, UserType.Customer);

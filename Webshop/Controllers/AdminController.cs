@@ -12,8 +12,14 @@ namespace Webshop.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        private IWebshopDAO dao = new WebshopDAO();
-        private IWebshopDSO dso = new WebshopDSO();
+        private IWebshopDAO dao;
+        private IWebshopDSO dso;
+
+        public AdminController(IWebshopDAO dao, IWebshopDSO dso)
+        {
+            this.dao = dao;
+            this.dso = dso;
+        }
 
         public ActionResult Index()
         {

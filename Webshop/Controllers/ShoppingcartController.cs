@@ -13,8 +13,14 @@ namespace Webshop.Controllers
     [InitializeSimpleMembership]
     public class ShoppingcartController : Controller
     {
-        private IWebshopDAO dao = new WebshopDAO();
-        private IWebshopDSO dso = new WebshopDSO();
+        private IWebshopDAO dao;
+        private IWebshopDSO dso;
+
+        public ShoppingcartController(IWebshopDAO dao, IWebshopDSO dso)
+        {
+            this.dao = dao;
+            this.dso = dso;
+        }
 
         //
         // GET: /Shoppingcart/
